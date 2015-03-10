@@ -12,6 +12,7 @@ packet = list()
 gps = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=0)
 
 def ReadFromGPS():
+	global s
 	while True:
 		try:
 			sym = gps.read().decode('ascii')
@@ -20,8 +21,7 @@ def ReadFromGPS():
 					qGpsPackets.pop(packet)
 					packet = list()
 					time.sleep(0.01)
-				else:
-					packet.append(s)
+				packet.append(s)
 				s = sym
 			else:
 				s += sym

@@ -6,7 +6,7 @@ import threading
 
 qGpsPackets = queue.Queue()
 s = ""
-sTake = list("RMC", "VTG", "GGA", "GSA", "GSV")
+sTake = list(("RMC", "VTG", "GGA", "GSA", "GSV"))
 packet = list()
 
 gps = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=0)

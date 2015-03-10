@@ -25,6 +25,7 @@ def ReadFromGPS():
 					packet = list()
 					time.sleep(0.01)
 				packet.append(s)
+				print("Append s: " + s)
 				s = sym
 			else:
 				s += sym

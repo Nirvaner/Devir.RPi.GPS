@@ -14,6 +14,6 @@ while True:
 			print()
 		print(sym, end="")
 	except Exception as error:
-		print error
+		print(error)
 		pass
 		gps = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=0)

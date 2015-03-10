@@ -32,7 +32,7 @@ def ReadFromGPS():
 def PrintFromQueue():
 	if q.qsize() > 0:
 		p = q.get()
-		for (i in p)
+		for (i in p):
 			print(p[i])
 
 print("Gps started")

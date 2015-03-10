@@ -20,11 +20,12 @@ def ReadFromGPS():
 		try:
 			sym = gps.read().decode('ascii')
 			if sym == "$":
-				if s[3:7] == "RMC":
+				if s[3:6] == "RMC":
 					qGpsPackets.pop(packet)
 					packet = list()
 					time.sleep(0.01)
-				packet.append(s)
+				if s[3:6] in sTake:
+					packet.append(s)
 				print("Append s: " + s)
 				s = sym
 			else:
@@ -39,7 +40,7 @@ def PrintFromQueue():
 		if qGpsPackets.qsize() > 0:
 			p = qGpsPackets.get()
 			for i in p:
-				print(p[i])
+				print(i)
 			time.sleep(0.1)
 
 print("Gps started")

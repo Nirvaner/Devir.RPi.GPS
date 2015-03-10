@@ -11,8 +11,10 @@ while True:
 	try:
 		sym = gps.read().decode('ascii')
 		if sym == "$":
-			print()
-		print(sym, end='')
+			print(s)
+			s = sym
+		else:
+			s += sym
 	except Exception as error:
 		print(error)
 		pass

@@ -12,6 +12,7 @@ packet = list()
 gps = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=0)
 
 def ReadFromGPS():
+	global gps
 	global qGpsPackets
 	global packet
 	global s

@@ -26,7 +26,8 @@ def ReadFromGPS():
 					time.sleep(0.01)
 				if s[3:6] in sTake:
 					packet.append(s)
-				s = sym
+				if sym not in ['\n', '\r']:
+					s = sym
 			else:
 				s += sym
 		except Exception as error:
@@ -38,7 +39,7 @@ def PrintFromQueue():
 	while True:
 		if qGpsPackets.qsize() > 0:
 			p = qGpsPackets.get()
-			print("Packet-------------------------------------------------", end='')
+			print("Packet-------------------------------------------------")
 			for i in p:
 				print(i)
 			time.sleep(0.1)

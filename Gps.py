@@ -3,7 +3,7 @@ import time
 import struct
 import queue
 
-qGpsPackets = Queue.Queue()
+qGpsPackets = queue.Queue()
 
 gps = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=0)
 

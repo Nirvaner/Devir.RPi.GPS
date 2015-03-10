@@ -12,6 +12,8 @@ packet = list()
 gps = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=0)
 
 def ReadFromGPS():
+	global qGpsPackets
+	global packet
 	global s
 	while True:
 		try:
@@ -32,8 +34,9 @@ def ReadFromGPS():
 
 def PrintFromQueue():
 	while True:
-		if q.qsize() > 0:
-			for i in q.get():
+		if qGpsPackets.qsize() > 0:
+			p = qGpsPackets.get()
+			for i in p:
 				print(p[i])
 			time.sleep(0.1)
 

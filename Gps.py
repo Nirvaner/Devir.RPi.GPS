@@ -26,10 +26,10 @@ def ReadFromGPS():
 					time.sleep(0.01)
 				if s[3:6] in sTake:
 					packet.append(s)
-				if sym not in ['\n', '\r']:
-					s = sym
+				s = sym
 			else:
-				s += sym
+				if sym not in [chr(10), chr(13)]:
+					s += sym
 		except Exception as error:
 			print(error)
 			pass

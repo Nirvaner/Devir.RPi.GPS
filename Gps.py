@@ -21,12 +21,11 @@ def ReadFromGPS():
 			sym = gps.read().decode('ascii')
 			if sym == "$":
 				if s[3:6] == "RMC":
-					qGpsPackets.pop(packet)
+					qGpsPackets.put(packet)
 					packet = list()
 					time.sleep(0.01)
 				if s[3:6] in sTake:
 					packet.append(s)
-				print("Append s: " + s)
 				s = sym
 			else:
 				s += sym

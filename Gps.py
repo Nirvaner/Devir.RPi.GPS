@@ -9,10 +9,10 @@ gps = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=0)
 
 while True:
 	try:
-		sym = gps.read()
+		sym = gps.read().decode('ascii')
 		if sym == "$":
 			print()
-		print(sym, end="")
+		print(sym, end='')
 	except Exception as error:
 		print(error)
 		pass

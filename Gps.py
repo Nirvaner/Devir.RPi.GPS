@@ -11,8 +11,8 @@ while True:
 	try:
 		sym = gps.read()
 		if sym == "$":
-			print
-		print sym,
+			print()
+		print(sym, end="")
 	except Exception as error:
 		print error
 		pass

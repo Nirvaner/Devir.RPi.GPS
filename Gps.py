@@ -1,7 +1,7 @@
 import serial
 import time
 import struct
-import Queue
+import queue
 
 qGpsPackets = Queue.Queue()
 

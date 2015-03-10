@@ -39,11 +39,11 @@ def PrintFromQueue():
 
 print("Gps started")
 
-tReadFromGPS = threading.Thread(target=ReadFromGPS, args = (q,))
+tReadFromGPS = threading.Thread(target=ReadFromGPS)
 tReadFromGPS.daemon = True
 tReadFromGPS.start()
 
-tPrintFromQueue = threading.Thread(target=ReadFromGPS, args = (q,))
+tPrintFromQueue = threading.Thread(target=PrintFromQueue)
 tPrintFromQueue.daemon = True
 tPrintFromQueue.start()
 

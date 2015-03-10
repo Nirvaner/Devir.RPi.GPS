@@ -38,6 +38,7 @@ def PrintFromQueue():
 	while True:
 		if qGpsPackets.qsize() > 0:
 			p = qGpsPackets.get()
+			print("Packet-------------------------------------------------")
 			for i in p:
 				print(i)
 			time.sleep(0.1)

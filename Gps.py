@@ -19,6 +19,7 @@ def ReadFromGPS():
 				if s[3:7] == "RMC":
 					qGpsPackets.pop(packet)
 					packet = list()
+					time.sleep(0.01)
 				else:
 					packet.append(s)
 				s = sym
@@ -30,10 +31,11 @@ def ReadFromGPS():
 			gps = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=0)
 
 def PrintFromQueue():
-	if q.qsize() > 0:
-		p = q.get()
-		for (i in p):
-			print(p[i])
+	while True:
+		if q.qsize() > 0:
+			for i in q.get():
+				print(p[i])
+			time.sleep(0.1)
 
 print("Gps started")
 

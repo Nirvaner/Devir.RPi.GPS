@@ -1,5 +1,7 @@
-var port = require('serialport').SerialPort("/dev/ttyAMA0");
+var SerialPort = require('serialport').SerialPort();
 
-port.on('data', function (data) {
+var gpsPort = new SerialPort("/dev/ttyAMA0");
+
+gpsPort.on('data', function (data) {
     console.log(data);
 });

@@ -1,7 +1,10 @@
-var SerialPort = require('serialport').SerialPort();
+var serialport = require('serialport');
 
-var gpsPort = new SerialPort("/dev/ttyAMA0");
+var port = new serialport.SerialPort('/dev/ttyAMA0', {
+    baudrate: 115200,
+    parser: serialport.parsers.readline('\r\n')
+});
 
-gpsPort.on('data', function (data) {
-    console.log(data);
+port.on('data', function (line) {
+    console.log(line);
 });

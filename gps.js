@@ -3,11 +3,17 @@ var serialPort = new SerialPort("/dev/ttyAMA0");
 
 serialPort.open(function (error) {
     if (error) {
-        console.log('failed to open: ' + error);
+        console.log('Ошибка открытия порта: ' + error);
     } else {
-        console.log('open');
+        console.log('Порт открыт');
         serialPort.on('data', function (data) {
-            console.log(data);
+            console.log(data.toString());
+        });
+        serialPort.on('error', function (error) {
+            console.log('Ошибка при выполнении: ' + error);
+        });
+        serialPort.on('close', function (data) {
+            console.log('Порт был закрыт: ' + data);
         });
     }
 });

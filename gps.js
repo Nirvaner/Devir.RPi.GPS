@@ -1,10 +1,13 @@
-var serialport = require('serialport');
+var SerialPort = require("serialport").SerialPort
+var serialPort = new SerialPort("/dev/ttyAMA0");
 
-var port = new serialport.SerialPort('/dev/ttyAMA0', {
-    baudrate: 115200,
-    parser: serialport.parsers.readline('\r\n')
-});
-
-port.on('data', function (line) {
-    console.log(line);
+serialPort.open(function (error) {
+    if (error) {
+        console.log('failed to open: ' + error);
+    } else {
+        console.log('open');
+        serialPort.on('data', function (data) {
+            console.log(data);
+        });
+    }
 });

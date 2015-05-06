@@ -4,12 +4,17 @@ const Imei = '000000000000000';
 const MaxPackets = 10000; // Maximum packets count in memory
 const MinPackets = 1; // Minimum packets count for send to server
 
-const SerialPortGPS = '/dev/ttyAMA0';
+const SerialPortGPS = 'COM10' ///dev/ttyAMA0';
 
 var dataQueue = [];
 
 var packet = {
-    DateTime: 0,
+    Year: 0,
+    Month: 0,
+    Day: 0,
+    Hour: 0,
+    Minute: 0,
+    Second: 0,
     Longitude: 0,
     Latitude: 0,
     Altitude: 0,
@@ -24,8 +29,6 @@ var packet = {
 var pack = packet;
 
 var nmeaString = '';
-
-var Int64 = require('node-int64');
 
 var SerialPort = require("serialport");
 var serialPort = new SerialPort.SerialPort(SerialPortGPS, {
@@ -45,15 +48,13 @@ serialPort.on('data', function (data) {
         nmeaString += s.substring(0, index + 1);
         var nmeaArr = nmeaString.split(',');
         if (nmeaString.substring(3, 6) == 'RMC') {
-            packet = pack;
-            var year = '20' + nmeaArr[9].substring(4);
-            var month = nmeaArr[9].substring(2, 4);
-            var day = nmeaArr[9].substring(0, 2);
-            var hour = nmeaArr[1].substring(0, 2);
-            var minute = nmeaArr[1].substring(2, 4);
-            var second = nmeaArr[1].substring(4);
-            pack.DateTime = new Date(year, month - 1, day, hour, minute, second).getTime();
-            pack.Time = nmeaArr[1];
+            packet = JSON.parse(JSON.stringify(pack));
+            pack.Year = nmeaArr[9].substring(4);
+            pack.Month = nmeaArr[9].substring(2, 4);
+            pack.Day = nmeaArr[9].substring(0, 2);
+            pack.Hour = nmeaArr[1].substring(0, 2);
+            pack.Minute = nmeaArr[1].substring(2, 4);
+            pack.Second = nmeaArr[1].substring(4);
             pack.Speed = nmeaArr[7] * 1.852;
             pack.Angle = nmeaArr[8];
         }
@@ -84,7 +85,7 @@ serialPort.open(function (error) {
 
 var LogicInterval = setInterval(function () {
     try {
-        console.log('DateTime: ' + new Date(packet.DateTime));
+        console.log('DateTime: ' + new Date('20' + packet.Year, packet.Month - 1, packet.Day, packet.Hour, packet.Minute, packet.Second));
         console.log('Latitude: ' + packet.Latitude);
         console.log('Longitude: ' + packet.Longitude);
         console.log('Altitude: ' + packet.Altitude);
@@ -97,16 +98,22 @@ var LogicInterval = setInterval(function () {
         if (dataQueue.length > MaxPackets) {
             dataQueue.pop();
         }
-        var buf = Buffer.concat([new Int64(packet.DateTime).toBuffer(), new Buffer(27)]);
-        buf.writeInt32BE(packet.Longitude, 8);
-        buf.writeInt32BE(packet.Latitude, 12);
-        buf.writeInt16BE(packet.Altitude, 16);
-        buf.writeInt16BE(packet.Angle == '' ? -1 : packet.Angle, 18);
-        buf.writeInt16BE(packet.Speed, 20);
-        buf.writeInt8(packet.Satellites, 22);
-        buf.writeFloatBE(packet.PDOP, 23);
-        buf.writeFloatBE(packet.HDOP, 27);
-        buf.writeFloatBE(packet.VDOP, 31);
+        var buf = new Buffer(33);
+        buf.writeInt8(packet.Year);
+        buf.writeInt8(packet.Month, 1);
+        buf.writeInt8(packet.Day, 2);
+        buf.writeInt8(packet.Hour, 3);
+        buf.writeInt8(packet.Minute, 4);
+        buf.writeInt8(packet.Second, 5);
+        buf.writeInt32BE(packet.Longitude, 6);
+        buf.writeInt32BE(packet.Latitude, 10);
+        buf.writeInt16BE(packet.Altitude, 14);
+        buf.writeInt16BE(packet.Angle == '' ? -1 : packet.Angle, 16);
+        buf.writeInt16BE(packet.Speed, 18);
+        buf.writeInt8(packet.Satellites, 20);
+        buf.writeFloatBE(packet.PDOP, 21);
+        buf.writeFloatBE(packet.HDOP, 25);
+        buf.writeFloatBE(packet.VDOP, 29);
         dataQueue.unshift(buf);
     }
     catch (error) {

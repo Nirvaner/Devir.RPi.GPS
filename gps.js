@@ -4,7 +4,7 @@ const Imei = '000000000000000';
 const MaxPackets = 10000; // Maximum packets count in memory
 const MinPackets = 1; // Minimum packets count for send to server
 
-const SerialPortGPS = 'COM10';
+const SerialPortGPS = '/dev/ttyAMA0';
 
 var dataQueue = [];
 

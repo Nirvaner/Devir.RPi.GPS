@@ -1,21 +1,35 @@
 const Host = '192.168.66.100';
 const Port = 11112;
+const Imei = '000000000000000';
+const MaxPackets = 10000; // Maximum packets count in memory
+const MinPackets = 1; // Minimum packets count for send to server
+
+const SerialPortGPS = 'COM10';
 
 var dataQueue = [];
 
 var packet = {
-    Time: 0,
+    DateTime: 0,
     Longitude: 0,
     Latitude: 0,
     Altitude: 0,
-    Satellites: 0
+    Angle: 0,
+    Speed: 0,
+    Satellites: 0,
+    PDOP: 0,
+    HDOP: 0,
+    VDOP: 0
 };
+
+var pack = packet;
 
 var nmeaString = '';
 
-var SerialPort = require("serialport")
-var serialPort = new SerialPort.SerialPort("/dev/ttyAMA0", {
-    baudrate: 9600,
+var Int64 = require('node-int64');
+
+var SerialPort = require("serialport");
+var serialPort = new SerialPort.SerialPort(SerialPortGPS, {
+    baudrate: 9600
 }, false);
 
 serialPort.on('error', function (error) {
@@ -27,21 +41,38 @@ serialPort.on('close', function (data) {
 serialPort.on('data', function (data) {
     var s = data.toString();
     var index = s.indexOf('\n');
-    if (index == -1) {
-        nmeaString += s;
-    }
-    else {
+    while (index != -1) {
         nmeaString += s.substring(0, index + 1);
-        if (nmeaString.substring(3, 6) == 'GGA') {
-            var nmeaArr = nmeaString.split(',');
-            packet.Time = nmeaArr[1];
-            packet.Longitude = nmeaArr[4].replace('.', '') * 1;
-            packet.Latitude = nmeaArr[2].replace('.', '') * 1;
-            packet.Altitude = nmeaArr[9];
-            packet.Satellites = nmeaArr[7];
+        var nmeaArr = nmeaString.split(',');
+        if (nmeaString.substring(3, 6) == 'RMC') {
+            packet = pack;
+            var year = '20' + nmeaArr[9].substring(4);
+            var month = nmeaArr[9].substring(2, 4);
+            var day = nmeaArr[9].substring(0, 2);
+            var hour = nmeaArr[1].substring(0, 2);
+            var minute = nmeaArr[1].substring(2, 4);
+            var second = nmeaArr[1].substring(4);
+            pack.DateTime = new Date(year, month - 1, day, hour, minute, second).getTime();
+            pack.Time = nmeaArr[1];
+            pack.Speed = nmeaArr[7] * 1.852;
+            pack.Angle = nmeaArr[8];
         }
-        nmeaString = s.substring(index + 1);
+        else if (nmeaString.substring(3, 6) == 'GGA') {
+            pack.Longitude = nmeaArr[4].replace('.', '') * 1;
+            pack.Latitude = nmeaArr[2].replace('.', '') * 1;
+            pack.Altitude = nmeaArr[9];
+            pack.Satellites = nmeaArr[7];
+        }
+        else if (nmeaString.substring(3, 6) == 'GSA') {
+            pack.PDOP = nmeaArr[15];
+            pack.HDOP = nmeaArr[16];
+            pack.VDOP = nmeaArr[17].split('*')[0];
+        }
+        nmeaString = '';
+        s = s.substring(index + 1);
+        index = s.indexOf('\n');
     }
+    nmeaString += s;
 });
 serialPort.open(function (error) {
     if (error) {
@@ -51,16 +82,32 @@ serialPort.open(function (error) {
     }
 });
 
-var Logic = setInterval(function () {
+var LogicInterval = setInterval(function () {
     try {
-        //console.log('Time: ' + packet.Time);
-        //console.log('Latitude: ' + packet.Latitude);
-        //console.log('Longitude: ' + packet.Longitude);
-        //console.log('Altitude: ' + packet.Altitude);
-        //console.log('Satellites: ' + packet.Satellites);
-        if (dataQueue.length > 10000)
-            dataQueue.shift();
-        dataQueue.push(packet);
+        console.log('DateTime: ' + new Date(packet.DateTime));
+        console.log('Latitude: ' + packet.Latitude);
+        console.log('Longitude: ' + packet.Longitude);
+        console.log('Altitude: ' + packet.Altitude);
+        console.log('Angle: ' + packet.Angle);
+        console.log('Speed: ' + packet.Speed);
+        console.log('Satellites: ' + packet.Satellites);
+        console.log('PDOP: ' + packet.PDOP);
+        console.log('HDOP: ' + packet.HDOP);
+        console.log('VDOP: ' + packet.VDOP);
+        if (dataQueue.length > MaxPackets) {
+            dataQueue.pop();
+        }
+        var buf = Buffer.concat([new Int64(packet.DateTime).toBuffer(), new Buffer(27)]);
+        buf.writeInt32BE(packet.Longitude, 8);
+        buf.writeInt32BE(packet.Latitude, 12);
+        buf.writeInt16BE(packet.Altitude, 16);
+        buf.writeInt16BE(packet.Angle == '' ? -1 : packet.Angle, 18);
+        buf.writeInt16BE(packet.Speed, 20);
+        buf.writeInt8(packet.Satellites, 22);
+        buf.writeFloatBE(packet.PDOP, 23);
+        buf.writeFloatBE(packet.HDOP, 27);
+        buf.writeFloatBE(packet.VDOP, 31);
+        dataQueue.unshift(buf);
     }
     catch (error) {
         console.log(error);
@@ -68,14 +115,36 @@ var Logic = setInterval(function () {
 }, 1000);
 
 var net = require('net');
-var client;
-var step = 0;
+var intervalSendToServer = setInterval(SendToServer, 10);
+function SendToServer() {
+    if (dataQueue.length == 0) return;
+    clearInterval(intervalSendToServer);
+    var client = net.connect({port: Port, host: Host}, function () {
+        console.log('Tcp connected');
+        client.on('data', function (data) {
+            if (data.length == 1 && data[0] == 1) {
+                var buf = dataQueue.pop();
+                var result = client.write(buf);
+                if (!result && dataQueue.length < MaxPackets) {
+                    dataQueue.push(buf);
+                }
+            }
+        });
+        client.on('end', function () {
+            console.log('Tcp disconnect');
+            intervalSendToServer = setInterval(SendToServer, 10);
+        });
+        client.write(Imei);
+    });
+    client.on('error', function (error) {
+        console.log('Tcp connect error: ');
+        console.log(error);
+        intervalSendToServer = setInterval(SendToServer, 10);
+    });
+}
 
-client = net.connect({ port: Port, host: Host }, function () {
-    console.log('Tcp port open');
-    client.on('end', function () { console.log('Tcp disconnect') });
-});
-
+//1433470474000
+//3246364432
 //$GPRMC,084120.00,A,5108.22102,N,07125.31107,E,0.026,,230415,,,D*75 // Минимально - рекомендованый набор данных
 //$GPVTG,,T,,M,0.026,N,0.049,K,D*2F // Вектор движения и скорости
 //$GPGGA,084120.00,5108.22102,N,07125.31107,E,2,11,0.84,388.0,M,-33.3,M,,0000*7B // Информация о фиксированном решении

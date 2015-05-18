@@ -65,9 +65,9 @@ serialPort.on('data', function (data) {
             pack.Satellites = nmeaArr[7];
         }
         else if (nmeaString.substring(3, 6) == 'GSA') {
-            pack.PDOP = nmeaArr[15];
-            pack.HDOP = nmeaArr[16];
-            pack.VDOP = nmeaArr[17].split('*')[0];
+            pack.PDOP = nmeaArr[15] * 1;
+            pack.HDOP = nmeaArr[16] * 1;
+            pack.VDOP = nmeaArr[17].split('*')[0] * 1;
         }
         nmeaString = '';
         s = s.substring(index + 1);
@@ -99,7 +99,7 @@ var LogicInterval = setInterval(function () {
             dataQueue.pop();
         }
         var buf = new Buffer(33);
-        buf.writeInt8(packet.Year);
+        buf.writeInt8(packet.Year, 0);
         buf.writeInt8(packet.Month, 1);
         buf.writeInt8(packet.Day, 2);
         buf.writeInt8(packet.Hour, 3);

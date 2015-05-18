@@ -56,7 +56,7 @@ serialPort.on('data', function (data) {
             pack.Minute = nmeaArr[1].substring(2, 4);
             pack.Second = nmeaArr[1].substring(4);
             pack.Speed = Math.round(nmeaArr[7] * 1.852);
-            pack.Angle = nmeaArr[8];
+            pack.Angle = nmeaArr[8] == '' ? -1 : nmeaArr[8];
         }
         else if (nmeaString.substring(3, 6) == 'GGA') {
             pack.Longitude = nmeaArr[4].replace('.', '') * 1;
@@ -107,8 +107,8 @@ var LogicInterval = setInterval(function () {
         buf.writeInt8(packet.Second, 5);
         buf.writeInt32BE(packet.Longitude, 6);
         buf.writeInt32BE(packet.Latitude, 10);
-        buf.writeInt16BE(Math.round(packet.Altitude), 14);
-        buf.writeInt16BE(packet.Angle == '' ? -1 : packet.Angle, 16);
+        buf.writeInt16BE(packet.Altitude, 14);
+        buf.writeInt16BE(packet.Angle, 16);
         buf.writeInt16BE(packet.Speed, 18);
         buf.writeInt8(packet.Satellites, 20);
         buf.writeFloatBE(packet.PDOP, 21);

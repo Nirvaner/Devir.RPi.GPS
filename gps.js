@@ -85,16 +85,16 @@ serialPort.open(function (error) {
 
 var LogicInterval = setInterval(function () {
     try {
-        console.log('DateTime: ' + new Date('20' + packet.Year, packet.Month - 1, packet.Day, packet.Hour, packet.Minute, packet.Second));
-        console.log('Latitude: ' + packet.Latitude);
-        console.log('Longitude: ' + packet.Longitude);
-        console.log('Altitude: ' + packet.Altitude);
-        console.log('Angle: ' + packet.Angle);
-        console.log('Speed: ' + packet.Speed);
-        console.log('Satellites: ' + packet.Satellites);
-        console.log('PDOP: ' + packet.PDOP);
-        console.log('HDOP: ' + packet.HDOP);
-        console.log('VDOP: ' + packet.VDOP);
+        //console.log('DateTime: ' + new Date('20' + packet.Year, packet.Month - 1, packet.Day, packet.Hour, packet.Minute, packet.Second));
+        //console.log('Latitude: ' + packet.Latitude);
+        //console.log('Longitude: ' + packet.Longitude);
+        //console.log('Altitude: ' + packet.Altitude);
+        //console.log('Angle: ' + packet.Angle);
+        //console.log('Speed: ' + packet.Speed);
+        //console.log('Satellites: ' + packet.Satellites);
+        //console.log('PDOP: ' + packet.PDOP);
+        //console.log('HDOP: ' + packet.HDOP);
+        //console.log('VDOP: ' + packet.VDOP);
         if (dataQueue.length > MaxPackets) {
             dataQueue.pop();
         }
@@ -122,7 +122,7 @@ var LogicInterval = setInterval(function () {
 }, 1000);
 
 var net = require('net');
-var intervalSendToServer = setInterval(SendToServer, 10);
+var intervalSendToServer = setInterval(SendToServer, 100000);
 function SendToServer() {
     if (dataQueue.length == 0) return;
     clearInterval(intervalSendToServer);
@@ -149,6 +149,27 @@ function SendToServer() {
         intervalSendToServer = setInterval(SendToServer, 10);
     });
 }
+
+var exec = require('child_process').exec;
+
+var sensorsTimer = setTimeout(function(){
+    exec('i2cdump -y 0x1 0x68 c',
+        {
+            encoding: 'utf8',
+            timeout: 10,
+            maxBuffer: 200*1024,
+            killSignal: 'SIGTERM',
+            cwd: null,
+            env: null
+        },
+        function(error, stdout, stderr){
+            console.log(stdout);
+            console.log('stderr: ' + stderr);
+            if (error !== null){
+                console.log('exec error: ' + error);
+            }
+        });
+}, 1000);
 
 //1433470474000
 //3246364432

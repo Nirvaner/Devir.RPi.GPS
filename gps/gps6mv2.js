@@ -4,23 +4,23 @@
 const SerialPortGPS = 'COM10';
 
 var packet = {
-    Year: 0,
-    Month: 0,
-    Day: 0,
-    Hour: 0,
-    Minute: 0,
-    Second: 0,
-    Longitude: 0,
-    Latitude: 0,
-    Altitude: 0,
-    Angle: 0,
-    Speed: 0,
-    Satellites: 0,
-    PDOP: 0,
-    HDOP: 0,
-    VDOP: 0
+    year: 0,
+    month: 0,
+    day: 0,
+    hour: 0,
+    minute: 0,
+    second: 0,
+    longitude: 0,
+    latitude: 0,
+    altitude: 0,
+    angle: 0,
+    speed: 0,
+    satellites: 0,
+    pdop: 0,
+    hdop: 0,
+    vdop: 0
 };
-exports.packet = packet;
+exports.gpsData = packet;
 
 var pack = packet;
 var nmeaString = '';
@@ -43,25 +43,25 @@ serialPort.on('data', function (data) {
         var nmeaArr = nmeaString.split(',');
         if (nmeaString.substring(3, 6) == 'RMC') {
             packet = JSON.parse(JSON.stringify(pack));
-            pack.Year = nmeaArr[9].substring(4);
-            pack.Month = nmeaArr[9].substring(2, 4);
-            pack.Day = nmeaArr[9].substring(0, 2);
-            pack.Hour = nmeaArr[1].substring(0, 2);
-            pack.Minute = nmeaArr[1].substring(2, 4);
-            pack.Second = nmeaArr[1].substring(4);
-            pack.Speed = Math.round(nmeaArr[7] * 1.852);
-            pack.Angle = nmeaArr[8] == '' ? pack.Angle : nmeaArr[8];
+            pack.year = nmeaArr[9].substring(4);
+            pack.month = nmeaArr[9].substring(2, 4);
+            pack.day = nmeaArr[9].substring(0, 2);
+            pack.hour = nmeaArr[1].substring(0, 2);
+            pack.minute = nmeaArr[1].substring(2, 4);
+            pack.second = nmeaArr[1].substring(4);
+            pack.speed = Math.round(nmeaArr[7] * 1.852);
+            pack.angle = nmeaArr[8] == '' ? pack.angle : nmeaArr[8];
         }
         else if (nmeaString.substring(3, 6) == 'GGA') {
-            pack.Longitude = nmeaArr[4].replace('.', '') * 1;
-            pack.Latitude = nmeaArr[2].replace('.', '') * 1;
-            pack.Altitude = Math.round(nmeaArr[9]);
-            pack.Satellites = nmeaArr[7];
+            pack.longitude = nmeaArr[4].replace('.', '') * 1;
+            pack.latitude = nmeaArr[2].replace('.', '') * 1;
+            pack.altitude = Math.round(nmeaArr[9]);
+            pack.satellites = nmeaArr[7];
         }
         else if (nmeaString.substring(3, 6) == 'GSA') {
-            pack.PDOP = nmeaArr[15] * 1;
-            pack.HDOP = nmeaArr[16] * 1;
-            pack.VDOP = nmeaArr[17].split('*')[0] * 1;
+            pack.pdop = nmeaArr[15] * 1;
+            pack.hdop = nmeaArr[16] * 1;
+            pack.vdop = nmeaArr[17].split('*')[0] * 1;
         }
         nmeaString = '';
         s = s.substring(index + 1);

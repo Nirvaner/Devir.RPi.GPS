@@ -1,41 +1,41 @@
 var settings = require('./../settings.js').settings;
-var gpsData = require('./gps6mv2.js').packet;
-//var spaseData = require('./mpu9150.js').spaseData;
+var gpsData = require('./gps6mv2.js').gpsData;
+var spaceData = require('./mpu9150.js').spaceData;
 
 var dataQueue = [];
 
 var LogicInterval = setInterval(function () {
     try {
-        console.log('DateTime: ' + new Date('20' + gpsData.Year, gpsData.Month - 1, gpsData.Day, gpsData.Hour, gpsData.Minute, gpsData.Second));
-        console.log('Latitude: ' + gpsData.Latitude);
-        console.log('Longitude: ' + gpsData.Longitude);
-        console.log('Altitude: ' + gpsData.Altitude);
-        console.log('Angle: ' + gpsData.Angle);
-        console.log('Speed: ' + gpsData.Speed);
-        console.log('Satellites: ' + gpsData.Satellites);
-        console.log('PDOP: ' + gpsData.PDOP);
-        console.log('HDOP: ' + gpsData.HDOP);
-        console.log('VDOP: ' + gpsData.VDOP);
-        //if (dataQueue.length > MaxPackets) {
-        //    dataQueue.pop();
-        //}
-        //var buf = new Buffer(33);
-        //buf.writeInt8(packet.Year, 0);
-        //buf.writeInt8(packet.Month, 1);
-        //buf.writeInt8(packet.Day, 2);
-        //buf.writeInt8(packet.Hour, 3);
-        //buf.writeInt8(packet.Minute, 4);
-        //buf.writeInt8(packet.Second, 5);
-        //buf.writeInt32BE(packet.Longitude, 6);
-        //buf.writeInt32BE(packet.Latitude, 10);
-        //buf.writeInt16BE(packet.Altitude, 14);
-        //buf.writeInt16BE(packet.Angle, 16);
-        //buf.writeInt16BE(packet.Speed, 18);
-        //buf.writeInt8(packet.Satellites, 20);
-        //buf.writeFloatBE(packet.PDOP, 21);
-        //buf.writeFloatBE(packet.HDOP, 25);
-        //buf.writeFloatBE(packet.VDOP, 29);
-        //dataQueue.unshift(buf);
+        console.log('DateTime: ' + new Date('20' + gpsData.year, gpsData.month - 1, gpsData.day, gpsData.hour, gpsData.minute, gpsData.second));
+        console.log('Latitude: ' + gpsData.latitude);
+        console.log('Longitude: ' + gpsData.longitude);
+        console.log('Altitude: ' + gpsData.altitude);
+        console.log('Angle: ' + gpsData.angle);
+        console.log('Speed: ' + gpsData.speed);
+        console.log('Satellites: ' + gpsData.satellites);
+        console.log('PDOP: ' + gpsData.pdop);
+        console.log('HDOP: ' + gpsData.hdop);
+        console.log('VDOP: ' + gpsData.vdop);
+        if (dataQueue.length > settings.MaxPackets) {
+            dataQueue.pop();
+        }
+        var buf = new Buffer(33);
+        buf.writeInt8(gpsData.year, 0);
+        buf.writeInt8(gpsData.month, 1);
+        buf.writeInt8(gpsData.day, 2);
+        buf.writeInt8(gpsData.hour, 3);
+        buf.writeInt8(gpsData.minute, 4);
+        buf.writeInt8(gpsData.second, 5);
+        buf.writeInt32BE(gpsData.longitude, 6);
+        buf.writeInt32BE(gpsData.latitude, 10);
+        buf.writeInt16BE(gpsData.altitude, 14);
+        buf.writeInt16BE(gpsData.angle, 16);
+        buf.writeInt16BE(gpsData.speed, 18);
+        buf.writeInt8(gpsData.satellites, 20);
+        buf.writeFloatBE(gpsData.pdop, 21);
+        buf.writeFloatBE(gpsData.hdop, 25);
+        buf.writeFloatBE(gpsData.vdop, 29);
+        dataQueue.unshift(buf);
     }
     catch (error) {
         console.log(error);
@@ -47,7 +47,7 @@ var intervalSendToServer = setInterval(SendToServer, 100000);
 function SendToServer() {
     if (dataQueue.length == 0) return;
     clearInterval(intervalSendToServer);
-    var client = net.connect({host: settings.Host, port: settings.Port}, function () {
+    var client = net.connect({host: settings.host, port: settings.port}, function () {
         console.log('Tcp connected');
         client.on('data', function (data) {
             if (data.length == 1 && data[0] == 1) {

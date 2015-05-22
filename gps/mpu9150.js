@@ -13,7 +13,7 @@ var mpu = new mpu9150();
 mpu.initialize();
 
 if (mpu.testConnection()) {
-    var sensorsTimer = setTimeout(function () {
+    var sensorsTimer = setInterval(function () {
         var dataArr = mpu.getMotion9();
         spaceData.gyro.x = dataArr[0];
         spaceData.gyro.y = dataArr[1];

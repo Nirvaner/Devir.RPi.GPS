@@ -15,14 +15,14 @@ mpu.initialize();
 if (mpu.testConnection()) {
     var sensorsTimer = setInterval(function () {
         var dataArr = mpu.getMotion9();
-        spaceData.gyro.x = dataArr[0];
-        spaceData.gyro.y = dataArr[1];
+        spaceData.gyro.y = dataArr[0];
+        spaceData.gyro.x = dataArr[1];
         spaceData.gyro.z = dataArr[2];
-        spaceData.accel.x = dataArr[3];
-        spaceData.accel.y = dataArr[4];
+        spaceData.accel.y = dataArr[3];
+        spaceData.accel.x = dataArr[4];
         spaceData.accel.z = dataArr[5];
-        spaceData.magneto.x = dataArr[6];
-        spaceData.magneto.y = dataArr[7];
+        spaceData.magneto.y = dataArr[6];
+        spaceData.magneto.x = dataArr[7];
         spaceData.magneto.z = dataArr[8];
         console.log('GyroX: ' + spaceData.gyro.x);
         console.log('GyroY: ' + spaceData.gyro.y);

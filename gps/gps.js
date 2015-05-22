@@ -42,31 +42,31 @@ var LogicInterval = setInterval(function () {
     }
 }, 1000);
 
-//var net = require('net');
-//var intervalSendToServer = setInterval(SendToServer, 100000);
-//function SendToServer() {
-//    if (dataQueue.length == 0) return;
-//    clearInterval(intervalSendToServer);
-//    var client = net.connect({host: settings.host, port: settings.port}, function () {
-//        console.log('Tcp connected');
-//        client.on('data', function (data) {
-//            if (data.length == 1 && data[0] == 1) {
-//                var buf = dataQueue.pop();
-//                var result = client.write(buf);
-//                if (!result && dataQueue.length < settings.MaxPackets) {
-//                    dataQueue.push(buf);
-//                }
-//            }
-//        });
-//        client.on('end', function () {
-//            console.log('Tcp disconnect');
-//            intervalSendToServer = setInterval(SendToServer, 10);
-//        });
-//        client.write(Imei);
-//    });
-//    client.on('error', function (error) {
-//        console.log('Tcp connect error: ');
-//        console.log(error);
-//        intervalSendToServer = setInterval(SendToServer, 10);
-//    });
-//}
+var net = require('net');
+var intervalSendToServer = setInterval(SendToServer, 100000);
+function SendToServer() {
+    if (dataQueue.length == 0) return;
+    clearInterval(intervalSendToServer);
+    var client = net.connect({host: settings.host, port: settings.port}, function () {
+        console.log('Tcp connected');
+        client.on('data', function (data) {
+            if (data.length == 1 && data[0] == 1) {
+                var buf = dataQueue.pop();
+                var result = client.write(buf);
+                if (!result && dataQueue.length < settings.MaxPackets) {
+                    dataQueue.push(buf);
+                }
+            }
+        });
+        client.on('end', function () {
+            console.log('Tcp disconnect');
+            intervalSendToServer = setInterval(SendToServer, 10);
+        });
+        client.write(Imei);
+    });
+    client.on('error', function (error) {
+        console.log('Tcp connect error: ');
+        console.log(error);
+        intervalSendToServer = setInterval(SendToServer, 10);
+    });
+}

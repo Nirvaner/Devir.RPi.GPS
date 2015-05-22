@@ -8,23 +8,30 @@ var spaceData = {
 };
 exports.spaceData = spaceData;
 
-var exec = require('child_process').exec;
+var mpu9150 = require('mpu9150');
+var mpu = new mpu9150();
+mpu.initialize();
 
-var sensorsTimer = setTimeout(function(){
-    exec('i2cdump -y 0x1 0x68 c',
-        {
-            encoding: 'utf8',
-            timeout: 10,
-            maxBuffer: 200*1024,
-            killSignal: 'SIGTERM',
-            cwd: null,
-            env: null
-        },
-        function(error, stdout, stderr){
-            console.log(stdout);
-            console.log('stderr: ' + stderr);
-            if (error !== null){
-                console.log('exec error: ' + error);
-            }
-        });
-}, 1000);
+if (mpu.testConnection()) {
+    var sensorsTimer = setTimeout(function () {
+        var dataArr = mpu.getMotion9();
+        spaceData.gyro.x = dataArr[0];
+        spaceData.gyro.y = dataArr[1];
+        spaceData.gyro.z = dataArr[2];
+        spaceData.accel.x = dataArr[3];
+        spaceData.accel.y = dataArr[4];
+        spaceData.accel.z = dataArr[5];
+        spaceData.magneto.x = dataArr[6];
+        spaceData.magneto.y = dataArr[7];
+        spaceData.magneto.z = dataArr[8];
+        console.log('GyroX: ' + spaceData.gyro.x);
+        console.log('GyroY: ' + spaceData.gyro.y);
+        console.log('GyroZ: ' + spaceData.gyro.z);
+        console.log('AccelX: ' + spaceData.accel.x);
+        console.log('AccelY: ' + spaceData.accel.y);
+        console.log('AccelZ: ' + spaceData.accel.z);
+        console.log('MagnetoX: ' + spaceData.magneto.x);
+        console.log('MagnetoY: ' + spaceData.magneto.y);
+        console.log('MagnetoZ: ' + spaceData.magneto.z);
+    }, 1000);
+}

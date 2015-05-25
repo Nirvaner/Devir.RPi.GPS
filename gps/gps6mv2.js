@@ -1,7 +1,7 @@
 /**
  * Created by Ivan on 21.05.2015.
  */
-const SerialPortGPS = 'COM10';
+const SerialPortGPS = '/dev/ttyAMA0';
 
 var packet = {
     year: 0,

@@ -34,5 +34,5 @@ if (mpu.testConnection()) {
         //console.log('MagnetoX: ' + spaceData.magneto.x);
         //console.log('MagnetoY: ' + spaceData.magneto.y);
         //console.log('MagnetoZ: ' + spaceData.magneto.z);
-    }, 200);
+    }, 20);
 }

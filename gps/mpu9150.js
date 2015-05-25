@@ -14,7 +14,7 @@ mpu.initialize();
 
 if (mpu.testConnection()) {
     var sensorsTimer = setInterval(function () {
-        console.log(mpu.getHeadingX());
+        console.log('Heading: ' + mpu.getHeading().toString());
         //var dataArr = mpu.getMotion9();
         //spaceData.gyro.y = dataArr[0];
         //spaceData.gyro.x = dataArr[1];
@@ -34,5 +34,5 @@ if (mpu.testConnection()) {
         //console.log('MagnetoX: ' + spaceData.magneto.x);
         //console.log('MagnetoY: ' + spaceData.magneto.y);
         //console.log('MagnetoZ: ' + spaceData.magneto.z);
-    });
+    }, 200);
 }

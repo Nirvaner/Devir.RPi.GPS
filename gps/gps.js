@@ -1,47 +1,48 @@
 var config = rootRequire('config.js');
-//var gpsData = rootRequire('gps/gps6mv2.js');
+var gpsData = rootRequire('gps/gps6mv2.js');
 var spaceData = rootRequire('gps/mpu9150.js');
-//
-//var dataQueue = [];
-//
-//var LogicInterval = setInterval(function () {
-//    try {
-//        //console.log('DateTime: ' + new Date('20' + gpsData.year, gpsData.month - 1, gpsData.day, gpsData.hour, gpsData.minute, gpsData.second));
-//        //console.log('Latitude: ' + gpsData.latitude);
-//        //console.log('Longitude: ' + gpsData.longitude);
-//        //console.log('Altitude: ' + gpsData.altitude);
-//        //console.log('Angle: ' + gpsData.angle);
-//        //console.log('Speed: ' + gpsData.speed);
-//        //console.log('Satellites: ' + gpsData.satellites);
-//        //console.log('PDOP: ' + gpsData.pdop);
-//        //console.log('HDOP: ' + gpsData.hdop);
-//        //console.log('VDOP: ' + gpsData.vdop);
-//        if (dataQueue.length > settings.MaxPackets) {
-//            dataQueue.pop();
-//        }
-//        var buf = new Buffer(33);
-//        buf.writeInt8(gpsData.year, 0);
-//        buf.writeInt8(gpsData.month, 1);
-//        buf.writeInt8(gpsData.day, 2);
-//        buf.writeInt8(gpsData.hour, 3);
-//        buf.writeInt8(gpsData.minute, 4);
-//        buf.writeInt8(gpsData.second, 5);
-//        buf.writeInt32BE(gpsData.longitude, 6);
-//        buf.writeInt32BE(gpsData.latitude, 10);
-//        buf.writeInt16BE(gpsData.altitude, 14);
-//        buf.writeInt16BE(gpsData.angle, 16);
-//        buf.writeInt16BE(gpsData.speed, 18);
-//        buf.writeInt8(gpsData.satellites, 20);
-//        buf.writeFloatBE(gpsData.pdop, 21);
-//        buf.writeFloatBE(gpsData.hdop, 25);
-//        buf.writeFloatBE(gpsData.vdop, 29);
-//        //dataQueue.unshift(buf);
-//    }
-//    catch (error) {
-//        console.log(error);
-//    }
-//}, 1000);
-//
+
+var dataQueue = [];
+
+var s = '                                             ';
+
+setInterval(function () {
+    try {
+        process.stdout.write('ax: ' + spaceData.a.x + s.substring(0, 10 - spaceData.a.x.toString().length));
+        process.stdout.write('ay: ' + spaceData.a.y + s.substring(0, 10 - spaceData.a.y.toString().length));
+        process.stdout.write('az: ' + spaceData.a.z + s.substring(0, 10 - spaceData.a.z.toString().length));
+        process.stdout.write('gx: ' + spaceData.g.x + s.substring(0, 10 - spaceData.g.x.toString().length));
+        process.stdout.write('gy: ' + spaceData.g.y + s.substring(0, 10 - spaceData.g.y.toString().length));
+        process.stdout.write('gz: ' + spaceData.g.z + s.substring(0, 10 - spaceData.g.z.toString().length));
+        process.stdout.write('mx: ' + spaceData.m.x + s.substring(0, 10 - spaceData.m.x.toString().length));
+        process.stdout.write('my: ' + spaceData.m.y + s.substring(0, 10 - spaceData.m.y.toString().length));
+        process.stdout.write('mz: ' + spaceData.m.z + s.substring(0, 10 - spaceData.m.z.toString().length));
+        if (dataQueue.length > config.MaxPackets) {
+            dataQueue.pop();
+        }
+        var buf = new Buffer(33);
+        buf.writeInt8(gpsData.year, 0);
+        buf.writeInt8(gpsData.month, 1);
+        buf.writeInt8(gpsData.day, 2);
+        buf.writeInt8(gpsData.hour, 3);
+        buf.writeInt8(gpsData.minute, 4);
+        buf.writeInt8(gpsData.second, 5);
+        buf.writeInt32BE(gpsData.longitude, 6);
+        buf.writeInt32BE(gpsData.latitude, 10);
+        buf.writeInt16BE(gpsData.altitude, 14);
+        buf.writeInt16BE(gpsData.angle, 16);
+        buf.writeInt16BE(gpsData.speed, 18);
+        buf.writeInt8(gpsData.satellites, 20);
+        buf.writeFloatBE(gpsData.pdop, 21);
+        buf.writeFloatBE(gpsData.hdop, 25);
+        buf.writeFloatBE(gpsData.vdop, 29);
+        //dataQueue.unshift(buf);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}, 1000);
+
 //var net = require('net');
 //var intervalSendToServer = setInterval(SendToServer, 100000);
 //function SendToServer() {

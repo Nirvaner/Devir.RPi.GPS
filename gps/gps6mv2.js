@@ -1,4 +1,5 @@
 const SerialPortGPS = '/dev/ttyAMA0';
+var _ = require('underscore')._;
 
 var packet = {
     year: 0,
@@ -19,7 +20,8 @@ var packet = {
 };
 module.exports = packet;
 
-var pack = packet;
+var pack = {};
+pack = _.extend(pack, packet);
 var nmeaString = '';
 
 var SerialPort = require("serialport");
@@ -39,7 +41,7 @@ serialPort.on('data', function (data) {
         nmeaString += s.substring(0, index + 1);
         var nmeaArr = nmeaString.split(',');
         if (nmeaString.substring(3, 6) == 'RMC') {
-            packet = JSON.parse(JSON.stringify(pack));
+            packet = _.extend(packet, pack);
             pack.year = nmeaArr[9].substring(4);
             pack.month = nmeaArr[9].substring(2, 4);
             pack.day = nmeaArr[9].substring(0, 2);

@@ -16,7 +16,7 @@ setInterval(function () {
         process.stdout.write('gz: ' + spaceData.g.z + s.substring(0, 10 - spaceData.g.z.toString().length));
         process.stdout.write('mx: ' + spaceData.m.x + s.substring(0, 10 - spaceData.m.x.toString().length));
         process.stdout.write('my: ' + spaceData.m.y + s.substring(0, 10 - spaceData.m.y.toString().length));
-        process.stdout.write('mz: ' + spaceData.m.z + s.substring(0, 10 - spaceData.m.z.toString().length));
+        process.stdout.writeln('mz: ' + spaceData.m.z + s.substring(0, 10 - spaceData.m.z.toString().length));
         if (dataQueue.length > config.MaxPackets) {
             dataQueue.pop();
         }
@@ -41,7 +41,7 @@ setInterval(function () {
     catch (error) {
         console.log(error);
     }
-}, 1000);
+}, 1);
 
 //var net = require('net');
 //var intervalSendToServer = setInterval(SendToServer, 100000);

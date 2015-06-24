@@ -34,5 +34,5 @@ if (mpu.testConnection()) {
         console.log('MX: ' + spaceData.m.x);
         console.log('MY: ' + spaceData.m.y);
         console.log('MZ: ' + spaceData.m.z);
-    }, 1000);
+    });
 }

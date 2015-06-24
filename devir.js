@@ -1,5 +1,7 @@
-/**
- * Created by Ivan on 21.05.2015.
- */
-var gps = require('./gps/gps.js');
+global.rootRequire = function(name){
+    return require(__dirname + '/' + name);
+}
+var config = rootRequire('config.js');
+
+var gps = rootRequire('gps/gps.js');
 console.log('Started');

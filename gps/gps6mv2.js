@@ -1,6 +1,3 @@
-/**
- * Created by Ivan on 21.05.2015.
- */
 const SerialPortGPS = '/dev/ttyAMA0';
 
 var packet = {
@@ -20,7 +17,7 @@ var packet = {
     hdop: 0,
     vdop: 0
 };
-exports.gpsData = packet;
+module.exports = packet;
 
 var pack = packet;
 var nmeaString = '';

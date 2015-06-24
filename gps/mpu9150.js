@@ -2,11 +2,11 @@
  * Created by Ivan on 21.05.2015.
  */
 var spaceData = {
-    gyro: {x: 0, y: 0, z: 0},
-    accel: {x: 0, y: 0, z: 0},
-    magneto: {x: 0, y: 0, z: 0}
+    g: {x: 0, y: 0, z: 0},
+    a: {x: 0, y: 0, z: 0},
+    m: {x: 0, y: 0, z: 0}
 };
-exports.spaceData = spaceData;
+module.exports = spaceData;
 
 var mpu9150 = require('mpu9150');
 var mpu = new mpu9150();

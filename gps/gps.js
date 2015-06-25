@@ -10,8 +10,7 @@ var max = 0;
 
 setInterval(function () {
     try {
-        var m = Math.max(Math.abs(data.g.x), Math.abs(data.g.y), Math.abs(data.g.z));
-        if (m > max) max = m;
+        max = Math.max(Math.abs(data.g.x), Math.abs(data.g.y), Math.abs(data.g.z), max);
         //process.stdout.write('ax: ' + spaceData.a.x + s.substring(0, 10 - spaceData.a.x.toString().length));
         //process.stdout.write('ay: ' + spaceData.a.y + s.substring(0, 10 - spaceData.a.y.toString().length));
         //process.stdout.write('az: ' + spaceData.a.z + s.substring(0, 10 - spaceData.a.z.toString().length));

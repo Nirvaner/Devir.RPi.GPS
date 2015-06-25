@@ -9,7 +9,6 @@ var mpu = new mpu9150();
 mpu.initialize();
 
 const MaxGyro = 16384;
-const  N = 256;
 
 var data = {};
 data = _.extend(data, spaceData);
@@ -30,11 +29,10 @@ if (mpu.testConnection()) {
         var mx = dataArr[7];
         var my = dataArr[6];
         var mz = dataArr[8] * (-1);
-
-        data.m.m = mx*mx/N + my*my/N + mz*mz/N;
-        data.m.x = mx;
-        data.m.y = my;
-        data.m.z = mz;
+        data.m.m = Math.max(mx, my, mz);
+        data.m.x = mx * 90 / data.m.m;
+        data.m.y = my * 90 / data.m.m;
+        data.m.z = mz * 90 / data.m.m;
         _.extend(spaceData, data);
     });
 }

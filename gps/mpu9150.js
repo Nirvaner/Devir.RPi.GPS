@@ -2,7 +2,7 @@ var _ = require('underscore')._;
 var spaceData = {
     g: {x: 0, y: 0, z: 0},
     a: {x: 0, y: 0, z: 0},
-    m: {x: 0, y: 0, z: 0}
+    m: {x: 0, y: 0, z: 0, m: 0}
 };
 var mpu9150 = require('mpu9150');
 var mpu = new mpu9150();
@@ -31,10 +31,10 @@ if (mpu.testConnection()) {
         var my = dataArr[6];
         var mz = dataArr[8] * (-1);
 
-        var m = mx*mx/N + my*my/N + mz*mz/N;
-        data.m.x = Math.round(mx * 90 / m);
-        data.m.y = Math.round(my * 90 / m);
-        data.m.z = Math.round(mz * 90 / m);
+        data.m.m = mx*mx/N + my*my/N + mz*mz/N;
+        data.m.x = mx;
+        data.m.y = my;
+        data.m.z = mz;
         _.extend(spaceData, data);
     });
 }

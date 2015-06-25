@@ -9,9 +9,9 @@ var s = '           ';
 setInterval(function () {
     try {
         var gLength = Math.sqrt(spaceData.g.x * spaceData.g.x + spaceData.g.y * spaceData.g.y + spaceData.g.z * spaceData.g.z);
-        var gx = Math.round(Math.acos(spaceData.g.x / gLength));
-        var gy = Math.round(Math.acos(spaceData.g.y / gLength));
-        var gz = Math.round(Math.acos(spaceData.g.z / gLength));
+        var gx = Math.round(Math.acos(spaceData.g.x / gLength) * 180 / Math.PI);
+        var gy = Math.round(Math.acos(spaceData.g.y / gLength) * 180 / Math.PI);
+        var gz = Math.round(Math.acos(spaceData.g.z / gLength) * 180 / Math.PI);
         //process.stdout.write('ax: ' + spaceData.a.x + s.substring(0, 10 - spaceData.a.x.toString().length));
         //process.stdout.write('ay: ' + spaceData.a.y + s.substring(0, 10 - spaceData.a.y.toString().length));
         //process.stdout.write('az: ' + spaceData.a.z + s.substring(0, 10 - spaceData.a.z.toString().length));

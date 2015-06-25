@@ -1,6 +1,6 @@
 var config = rootRequire('config.js');
-var gpsData = rootRequire('gps/gps6mv2.js');
-var spaceData = rootRequire('gps/mpu9150.js');
+var gps = rootRequire('gps/gps6mv2.js');
+var space = rootRequire('gps/mpu9150.js');
 
 var dataQueue = [];
 
@@ -8,46 +8,48 @@ var s = '           ';
 
 setInterval(function () {
     try {
-        var gLength = Math.sqrt(spaceData.g.x * spaceData.g.x + spaceData.g.y * spaceData.g.y + spaceData.g.z * spaceData.g.z);
-        var gx = Math.round(Math.acos(spaceData.g.x / gLength) * 180 / Math.PI);
-        var gy = Math.round(Math.acos(spaceData.g.y / gLength) * 180 / Math.PI);
-        var gz = Math.round(Math.acos(spaceData.g.z / gLength) * 180 / Math.PI);
-        //process.stdout.write('ax: ' + spaceData.a.x + s.substring(0, 10 - spaceData.a.x.toString().length));
-        //process.stdout.write('ay: ' + spaceData.a.y + s.substring(0, 10 - spaceData.a.y.toString().length));
-        //process.stdout.write('az: ' + spaceData.a.z + s.substring(0, 10 - spaceData.a.z.toString().length));
-        process.stdout.write('gx: ' + spaceData.g.x + s.substring(0, 10 - spaceData.g.x.toString().length));
-        process.stdout.write('gy: ' + spaceData.g.y + s.substring(0, 10 - spaceData.g.y.toString().length));
-        process.stdout.write('gz: ' + spaceData.g.z + s.substring(0, 10 - spaceData.g.z.toString().length));
-        process.stdout.write('ax: ' + gx + s.substring(0, 10 - gx.toString().length));
-        process.stdout.write('ay: ' + gy + s.substring(0, 10 - gy.toString().length));
-        process.stdout.write('az: ' + gz + s.substring(0, 10 - gz.toString().length));
-        process.stdout.write('mx: ' + spaceData.m.x + s.substring(0, 10 - spaceData.m.x.toString().length));
-        process.stdout.write('my: ' + spaceData.m.y + s.substring(0, 10 - spaceData.m.y.toString().length));
-        process.stdout.write('mz: ' + spaceData.m.z + s.substring(0, 10 - spaceData.m.z.toString().length));
-        process.stdout.write('m: ' + m + s.substring(0, 10 - m.toString().length));
-        //process.stdout.write('lat: ' + gpsData.latitude);
-        //process.stdout.write('lon: ' + gpsData.longitude);
-        //process.stdout.write('sat: ' + gpsData.satellites);
+        process.stdout.write('gx: ' + space.g.x + s.substring(0, 10 - space.g.x.toString().length));
+        process.stdout.write('gy: ' + space.g.y + s.substring(0, 10 - space.g.y.toString().length));
+        process.stdout.write('gz: ' + space.g.z + s.substring(0, 10 - space.g.z.toString().length));
+        var gLength = Math.sqrt(space.g.x * space.g.x + space.g.y * space.g.y + space.g.z * space.g.z);
+        var gxAngle = Math.round(Math.acos(space.g.x / gLength) * 180 / Math.PI);
+        var gyAngle = Math.round(Math.acos(space.g.y / gLength) * 180 / Math.PI);
+        var gzAngle = Math.round(Math.acos(space.g.z / gLength) * 180 / Math.PI);
+        process.stdout.write('agx: ' + gxAngle + s.substring(0, 10 - gxAngle.toString().length));
+        process.stdout.write('agy: ' + gyAngle + s.substring(0, 10 - gyAngle.toString().length));
+        process.stdout.write('agz: ' + gzAngle + s.substring(0, 10 - gzAngle.toString().length));
+
+        process.stdout.write('mx: ' + space.m.x + s.substring(0, 10 - space.m.x.toString().length));
+        process.stdout.write('my: ' + space.m.y + s.substring(0, 10 - space.m.y.toString().length));
+        process.stdout.write('mz: ' + space.m.z + s.substring(0, 10 - space.m.z.toString().length));
+        var mLength = Math.sqrt(space.m.x * space.m.x + space.m.y * space.m.y + space.m.z * space.m.z);
+        var mxAngle = Math.round(Math.acos(space.m.x / mLength) * 180 / Math.PI);
+        var myAngle = Math.round(Math.acos(space.m.y / mLength) * 180 / Math.PI);
+        var mzAngle = Math.round(Math.acos(space.m.z / mLength) * 180 / Math.PI);
+        process.stdout.write('amx: ' + mxAngle + s.substring(0, 10 - mxAngle.toString().length));
+        process.stdout.write('amy: ' + myAngle + s.substring(0, 10 - myAngle.toString().length));
+        process.stdout.write('amz: ' + mzAngle + s.substring(0, 10 - mzAngle.toString().length));
+
         console.log('');
         if (dataQueue.length > config.MaxPackets) {
             dataQueue.pop();
         }
         var buf = new Buffer(33);
-        buf.writeInt8(gpsData.year, 0);
-        buf.writeInt8(gpsData.month, 1);
-        buf.writeInt8(gpsData.day, 2);
-        buf.writeInt8(gpsData.hour, 3);
-        buf.writeInt8(gpsData.minute, 4);
-        buf.writeInt8(gpsData.second, 5);
-        buf.writeInt32BE(gpsData.longitude, 6);
-        buf.writeInt32BE(gpsData.latitude, 10);
-        buf.writeInt16BE(gpsData.altitude, 14);
-        buf.writeInt16BE(gpsData.angle, 16);
-        buf.writeInt16BE(gpsData.speed, 18);
-        buf.writeInt8(gpsData.satellites, 20);
-        buf.writeFloatBE(gpsData.pdop, 21);
-        buf.writeFloatBE(gpsData.hdop, 25);
-        buf.writeFloatBE(gpsData.vdop, 29);
+        buf.writeInt8(gps.year, 0);
+        buf.writeInt8(gps.month, 1);
+        buf.writeInt8(gps.day, 2);
+        buf.writeInt8(gps.hour, 3);
+        buf.writeInt8(gps.minute, 4);
+        buf.writeInt8(gps.second, 5);
+        buf.writeInt32BE(gps.longitude, 6);
+        buf.writeInt32BE(gps.latitude, 10);
+        buf.writeInt16BE(gps.altitude, 14);
+        buf.writeInt16BE(gps.angle, 16);
+        buf.writeInt16BE(gps.speed, 18);
+        buf.writeInt8(gps.satellites, 20);
+        buf.writeFloatBE(gps.pdop, 21);
+        buf.writeFloatBE(gps.hdop, 25);
+        buf.writeFloatBE(gps.vdop, 29);
         //dataQueue.unshift(buf);
     }
     catch (error) {

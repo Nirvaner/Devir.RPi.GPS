@@ -8,7 +8,7 @@ var mpu9150 = require('mpu9150');
 var mpu = new mpu9150();
 mpu.initialize();
 
-const MaxGyro = mpu.getFullScaleGyroRange();
+const MaxGyro = 16384;
 
 var data = {};
 data = _.extend(data, spaceData);

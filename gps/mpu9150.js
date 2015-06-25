@@ -2,13 +2,11 @@ var _ = require('underscore')._;
 var spaceData = {
     g: {x: 0, y: 0, z: 0},
     a: {x: 0, y: 0, z: 0},
-    m: {x: 0, y: 0, z: 0, m: 0}
+    m: {x: 0, y: 0, z: 0}
 };
 var mpu9150 = require('mpu9150');
 var mpu = new mpu9150();
 mpu.initialize();
-
-const MaxGyro = 16384;
 
 var data = {};
 data = _.extend(data, spaceData);
@@ -20,28 +18,15 @@ if (mpu.testConnection()) {
             console.log('ErrorMPURead:');
             console.log(error);
         }
-        data.g.x = Math.round(dataArr[0] * 90 / MaxGyro);
-        data.g.y = Math.round(dataArr[1] * 90 / MaxGyro);
-        data.g.z = Math.round(dataArr[2] * 90 / MaxGyro);
-        if (data.g.x > 90){
-            data.g.x = 90;
-        }
-        if (data.g.y > 90){
-            data.g.y = 90;
-        }
-        if (data.g.z > 90){
-            data.g.z = 90;
-        }
+        data.g.x = dataArr[0];
+        data.g.y = dataArr[1];
+        data.g.z = dataArr[2];
         data.a.x = dataArr[3];
         data.a.y = dataArr[4];
         data.a.z = dataArr[5];
-        var mx = dataArr[7];
-        var my = dataArr[6];
-        var mz = dataArr[8];
-        data.m.m = Math.max(Math.abs(mx), Math.abs(my), Math.abs(mz));
-        data.m.x = Math.round(mx * 90 / data.m.m);
-        data.m.y = Math.round(my * 90 / data.m.m);
-        data.m.z = Math.round(mz * 90 / data.m.m);
+        data.m.x = dataArr[7];
+        data.m.y = dataArr[6];
+        data.m.z = dataArr[8];
         _.extend(spaceData, data);
     });
 }

@@ -14,11 +14,9 @@ setInterval(function () {
         process.stdout.write('gx: ' + spaceData.g.x + s.substring(0, 10 - spaceData.g.x.toString().length));
         process.stdout.write('gy: ' + spaceData.g.y + s.substring(0, 10 - spaceData.g.y.toString().length));
         process.stdout.write('gz: ' + spaceData.g.z + s.substring(0, 10 - spaceData.g.z.toString().length));
-        process.stdout.write('max: ' + max + s.substring(0, 10 - max.toString().length));
         process.stdout.write('mx: ' + spaceData.m.x + s.substring(0, 10 - spaceData.m.x.toString().length));
         process.stdout.write('my: ' + spaceData.m.y + s.substring(0, 10 - spaceData.m.y.toString().length));
         process.stdout.write('mz: ' + spaceData.m.z + s.substring(0, 10 - spaceData.m.z.toString().length));
-        process.stdout.write('m: ' + spaceData.m + s.substring(0, 10 - spaceData.m.toString().length));
         //process.stdout.write('lat: ' + gpsData.latitude);
         //process.stdout.write('lon: ' + gpsData.longitude);
         //process.stdout.write('sat: ' + gpsData.satellites);

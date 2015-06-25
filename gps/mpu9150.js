@@ -30,9 +30,9 @@ if (mpu.testConnection()) {
         var my = dataArr[6];
         var mz = dataArr[8] * (-1);
         data.m.m = Math.max(mx, my, mz);
-        data.m.x = mx * 90 / data.m.m;
-        data.m.y = my * 90 / data.m.m;
-        data.m.z = mz * 90 / data.m.m;
+        data.m.x = Math.round(mx * 90 / data.m.m);
+        data.m.y = Math.round(my * 90 / data.m.m);
+        data.m.z = Math.round(mz * 90 / data.m.m);
         _.extend(spaceData, data);
     });
 }

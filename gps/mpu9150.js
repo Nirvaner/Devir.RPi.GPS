@@ -26,8 +26,8 @@ if (mpu.testConnection()) {
         data.a.x = dataArr[3];
         data.a.y = dataArr[4];
         data.a.z = dataArr[5];
-        var mx = dataArr[6];
-        var my = dataArr[7];
+        var mx = dataArr[7];
+        var my = dataArr[6];
         var mz = dataArr[8];
         var m = Math.max(Math.abs(mx), Math.abs(my), Math.abs(mz));
         data.m.x = Math.round(mx * 90 / m);

@@ -8,7 +8,7 @@ var mpu9150 = require('mpu9150');
 var mpu = new mpu9150();
 mpu.initialize();
 
-const MaxGyro = 16384 * 2;
+const MaxGyro = 16384;
 
 var data = {};
 data = _.extend(data, spaceData);
@@ -23,6 +23,15 @@ if (mpu.testConnection()) {
         data.g.x = Math.round(dataArr[0] * 90 / MaxGyro);
         data.g.y = Math.round(dataArr[1] * 90 / MaxGyro);
         data.g.z = Math.round(dataArr[2] * 90 / MaxGyro);
+        if (data.g.x > 90){
+            data.g.x = 90;
+        }
+        if (data.g.y > 90){
+            data.g.y = 90;
+        }
+        if (data.g.z > 90){
+            data.g.z = 90;
+        }
         data.a.x = dataArr[3];
         data.a.y = dataArr[4];
         data.a.z = dataArr[5];

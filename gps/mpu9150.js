@@ -20,18 +20,18 @@ if (mpu.testConnection()) {
             console.log('ErrorMPURead:');
             console.log(error);
         }
-        data.g.y = Math.round(dataArr[0] * 90 / MaxGyro);
-        data.g.x = Math.round(dataArr[1] * 90 / MaxGyro);
+        data.g.x = Math.round(dataArr[0] * 90 / MaxGyro);
+        data.g.y = Math.round(dataArr[1] * 90 / MaxGyro);
         data.g.z = Math.round(dataArr[2] * 90 / MaxGyro);
-        data.a.y = dataArr[3];
-        data.a.x = dataArr[4];
+        data.a.x = dataArr[3];
+        data.a.y = dataArr[4];
         data.a.z = dataArr[5];
-        var my = dataArr[6];
-        var mx = dataArr[7];
+        var mx = dataArr[6];
+        var my = dataArr[7];
         var mz = dataArr[8];
-        var m = Math.max([my, mx, mz]);
-        data.m.y = Math.round(my * 90 / m);
+        var m = Math.max([mx, my, mz]);
         data.m.x = Math.round(mx * 90 / m);
+        data.m.y = Math.round(my * 90 / m);
         data.m.z = Math.round(mz * 90 / m);
         _.extend(spaceData, data);
     });

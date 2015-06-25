@@ -8,6 +8,8 @@ var mpu9150 = require('mpu9150');
 var mpu = new mpu9150();
 mpu.initialize();
 
+const MaxGyro = 16384;
+
 var data = {};
 data = _.extend(data, spaceData);
 if (mpu.testConnection()) {
@@ -18,9 +20,9 @@ if (mpu.testConnection()) {
             console.log('ErrorMPURead:');
             console.log(error);
         }
-        data.g.y = dataArr[0];
-        data.g.x = dataArr[1];
-        data.g.z = dataArr[2];
+        data.g.y = Math.round(dataArr[0] / (MaxGyro / 360));
+        data.g.x = Math.round(dataArr[1] / (MaxGyro / 360));
+        data.g.z = Math.round(dataArr[2] / (MaxGyro / 360));
         data.a.y = dataArr[3];
         data.a.x = dataArr[4];
         data.a.z = dataArr[5];

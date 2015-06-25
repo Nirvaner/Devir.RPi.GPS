@@ -4,10 +4,11 @@ var spaceData = rootRequire('gps/mpu9150.js');
 
 var dataQueue = [];
 
-var s = '                                             ';
+var s = '           ';
 
 setInterval(function () {
     try {
+        var m = Math.round(Math.sqrt(spaceData.m.x * spaceData.m.x + spaceData.m.y * spaceData.m.y + spaceData.m.z * spaceData.m.z));
         //process.stdout.write('ax: ' + spaceData.a.x + s.substring(0, 10 - spaceData.a.x.toString().length));
         //process.stdout.write('ay: ' + spaceData.a.y + s.substring(0, 10 - spaceData.a.y.toString().length));
         //process.stdout.write('az: ' + spaceData.a.z + s.substring(0, 10 - spaceData.a.z.toString().length));
@@ -17,6 +18,7 @@ setInterval(function () {
         process.stdout.write('mx: ' + spaceData.m.x + s.substring(0, 10 - spaceData.m.x.toString().length));
         process.stdout.write('my: ' + spaceData.m.y + s.substring(0, 10 - spaceData.m.y.toString().length));
         process.stdout.write('mz: ' + spaceData.m.z + s.substring(0, 10 - spaceData.m.z.toString().length));
+        process.stdout.write('m: ' + m + s.substring(0, 10 - m.toString().length));
         //process.stdout.write('lat: ' + gpsData.latitude);
         //process.stdout.write('lon: ' + gpsData.longitude);
         //process.stdout.write('sat: ' + gpsData.satellites);

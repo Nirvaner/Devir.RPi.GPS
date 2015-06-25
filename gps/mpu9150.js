@@ -20,9 +20,9 @@ if (mpu.testConnection()) {
             console.log('ErrorMPURead:');
             console.log(error);
         }
-        data.g.y = Math.round(dataArr[0] / (MaxGyro / 360));
-        data.g.x = Math.round(dataArr[1] / (MaxGyro / 360));
-        data.g.z = Math.round(dataArr[2] / (MaxGyro / 360));
+        data.g.y = Math.round(dataArr[0] * 90 / MaxGyro);
+        data.g.x = Math.round(dataArr[1] * 90 / MaxGyro);
+        data.g.z = Math.round(dataArr[2] * 90 / MaxGyro);
         data.a.y = dataArr[3];
         data.a.x = dataArr[4];
         data.a.z = dataArr[5];

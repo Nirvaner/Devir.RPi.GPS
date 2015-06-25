@@ -8,13 +8,19 @@ var s = '           ';
 
 setInterval(function () {
     try {
-        var m = Math.round(Math.sqrt(spaceData.m.x * spaceData.m.x + spaceData.m.y * spaceData.m.y + spaceData.m.z * spaceData.m.z));
+        var gLength = Math.sqrt(spaceData.g.x * spaceData.g.x + spaceData.g.y * spaceData.g.y + spaceData.g.z * spaceData.g.z);
+        var gx = Math.round(Math.acos(spaceData.g.x / gLength));
+        var gy = Math.round(Math.acos(spaceData.g.y / gLength));
+        var gz = Math.round(Math.acos(spaceData.g.z / gLength));
         //process.stdout.write('ax: ' + spaceData.a.x + s.substring(0, 10 - spaceData.a.x.toString().length));
         //process.stdout.write('ay: ' + spaceData.a.y + s.substring(0, 10 - spaceData.a.y.toString().length));
         //process.stdout.write('az: ' + spaceData.a.z + s.substring(0, 10 - spaceData.a.z.toString().length));
         process.stdout.write('gx: ' + spaceData.g.x + s.substring(0, 10 - spaceData.g.x.toString().length));
         process.stdout.write('gy: ' + spaceData.g.y + s.substring(0, 10 - spaceData.g.y.toString().length));
         process.stdout.write('gz: ' + spaceData.g.z + s.substring(0, 10 - spaceData.g.z.toString().length));
+        process.stdout.write('ax: ' + gx + s.substring(0, 10 - gx.toString().length));
+        process.stdout.write('ay: ' + gy + s.substring(0, 10 - gy.toString().length));
+        process.stdout.write('az: ' + gz + s.substring(0, 10 - gz.toString().length));
         process.stdout.write('mx: ' + spaceData.m.x + s.substring(0, 10 - spaceData.m.x.toString().length));
         process.stdout.write('my: ' + spaceData.m.y + s.substring(0, 10 - spaceData.m.y.toString().length));
         process.stdout.write('mz: ' + spaceData.m.z + s.substring(0, 10 - spaceData.m.z.toString().length));

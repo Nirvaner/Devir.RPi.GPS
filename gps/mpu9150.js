@@ -9,6 +9,7 @@ var mpu = new mpu9150();
 mpu.initialize();
 
 const MaxGyro = 16384;
+const  N = 256;
 
 var data = {};
 data = _.extend(data, spaceData);
@@ -29,7 +30,8 @@ if (mpu.testConnection()) {
         var mx = dataArr[7];
         var my = dataArr[6];
         var mz = dataArr[8] * (-1);
-        var m = Math.max(Math.abs(mx), Math.abs(my), Math.abs(mz));
+
+        var m = mx*mx/N + my*my/N + mz*mz/N;
         data.m.x = Math.round(mx * 90 / m);
         data.m.y = Math.round(my * 90 / m);
         data.m.z = Math.round(mz * 90 / m);

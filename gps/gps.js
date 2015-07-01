@@ -34,7 +34,7 @@ setInterval(function () {
         //var angleGM = Math.round(Math.acos(scalGM / (gLength * mLength)) * 180 / Math.PI);
         //var angleMGorizont = angleGM - 90;
 
-        process.stdout('angle: ' + angleGM + s.substring(0, 10 - angleGM.toString().length));
+        //process.stdout('angle: ' + angleGM + s.substring(0, 10 - angleGM.toString().length));
 
         console.log('');
         if (dataQueue.length > config.MaxPackets) {

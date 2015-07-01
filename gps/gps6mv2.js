@@ -38,38 +38,40 @@ serialPort.on('close', function (data) {
 });
 serialPort.on('data', function (data) {
     try {
-        var s = data.toString();
-        var index = s.indexOf('\n');
-        while (index != -1) {
-            nmeaString += s.substring(0, index + 1);
-            var nmeaArr = nmeaString.split(',');
-            if (nmeaString.substring(3, 6) == 'RMC') {
-                packet = _.extend(packet, pack);
-                pack.year = nmeaArr[9].substring(4);
-                pack.month = nmeaArr[9].substring(2, 4);
-                pack.day = nmeaArr[9].substring(0, 2);
-                pack.hour = nmeaArr[1].substring(0, 2);
-                pack.minute = nmeaArr[1].substring(2, 4);
-                pack.second = nmeaArr[1].substring(4);
-                pack.speed = Math.round(nmeaArr[7] * 1.852);
-                pack.angle = nmeaArr[8] == '' ? pack.angle : nmeaArr[8];
+        if (data) {
+            var s = data.toString();
+            var index = s.indexOf('\n');
+            while (index != -1) {
+                nmeaString += s.substring(0, index + 1);
+                var nmeaArr = nmeaString.split(',');
+                if (nmeaString.substring(3, 6) == 'RMC') {
+                    packet = _.extend(packet, pack);
+                    pack.year = nmeaArr[9].substring(4);
+                    pack.month = nmeaArr[9].substring(2, 4);
+                    pack.day = nmeaArr[9].substring(0, 2);
+                    pack.hour = nmeaArr[1].substring(0, 2);
+                    pack.minute = nmeaArr[1].substring(2, 4);
+                    pack.second = nmeaArr[1].substring(4);
+                    pack.speed = Math.round(nmeaArr[7] * 1.852);
+                    pack.angle = nmeaArr[8] == '' ? pack.angle : nmeaArr[8];
+                }
+                else if (nmeaString.substring(3, 6) == 'GGA') {
+                    pack.longitude = nmeaArr[4].replace('.', '') * 1;
+                    pack.latitude = nmeaArr[2].replace('.', '') * 1;
+                    pack.altitude = Math.round(nmeaArr[9]);
+                    pack.satellites = nmeaArr[7];
+                }
+                else if (nmeaString.substring(3, 6) == 'GSA') {
+                    pack.pdop = nmeaArr[15] * 1;
+                    pack.hdop = nmeaArr[16] * 1;
+                    pack.vdop = nmeaArr[17].split('*')[0] * 1;
+                }
+                nmeaString = '';
+                s = s.substring(index + 1);
+                index = s.indexOf('\n');
             }
-            else if (nmeaString.substring(3, 6) == 'GGA') {
-                pack.longitude = nmeaArr[4].replace('.', '') * 1;
-                pack.latitude = nmeaArr[2].replace('.', '') * 1;
-                pack.altitude = Math.round(nmeaArr[9]);
-                pack.satellites = nmeaArr[7];
-            }
-            else if (nmeaString.substring(3, 6) == 'GSA') {
-                pack.pdop = nmeaArr[15] * 1;
-                pack.hdop = nmeaArr[16] * 1;
-                pack.vdop = nmeaArr[17].split('*')[0] * 1;
-            }
-            nmeaString = '';
-            s = s.substring(index + 1);
-            index = s.indexOf('\n');
+            nmeaString += s;
         }
-        nmeaString += s;
     }catch(error){
         console.log('ErrorGpsSerialPortOnData: ');
         console.log(error);

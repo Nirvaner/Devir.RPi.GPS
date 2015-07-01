@@ -30,8 +30,8 @@ setInterval(function () {
         process.stdout.write('amy: ' + myAngle + s.substring(0, 10 - myAngle.toString().length));
         process.stdout.write('amz: ' + mzAngle + s.substring(0, 10 - mzAngle.toString().length));
 
-        var scalGM = space.g.x * space.m.x + space.g.y * space.m.y + space.g.z * space.m.z;
-        var angleGM = Math.round(Math.acos(scalGM / (gLength * mLength)) * 180 / Math.PI);
+        //var scalGM = space.g.x * space.m.x + space.g.y * space.m.y + space.g.z * space.m.z;
+        //var angleGM = Math.round(Math.acos(scalGM / (gLength * mLength)) * 180 / Math.PI);
         //var angleMGorizont = angleGM - 90;
 
         process.stdout('angle: ' + angleGM + s.substring(0, 10 - angleGM.toString().length));

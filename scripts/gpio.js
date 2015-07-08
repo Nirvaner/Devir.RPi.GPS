@@ -2,7 +2,7 @@
 global.RootPath = __dirname + '/';
 global.RootRequire = function(name){
     return require(RootPath + name);
-}
+};
 
 var gpio = require('gpio');
 if (process.argv.length < 2){
@@ -10,7 +10,7 @@ if (process.argv.length < 2){
     process.exit(0);
 }
 try {
-    var pinNumber = Uint8.parse(process.argv[0]);
+    var pinNumber = process.argv[0] * 1;
 }catch(error){
     console.log('First argument on command line = UInt8, error: ' + error);
 }
@@ -24,4 +24,4 @@ var pin = gpio.export(pinNumber, {
             pin.set(0);
         }
     }
-})
+});

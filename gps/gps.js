@@ -13,37 +13,37 @@ setInterval(function () {
         space.g.y = space.g.y * Math.cos(gyzProjectionAngle) - space.g.z * Math.sin(gyzProjectionAngle);
         space.g.z = space.g.y * Math.sin(gyzProjectionAngle) + space.g.z * Math.cos(gyzProjectionAngle);
 
-        process.stdout.write('gy1: ' + space.g.y.toString() + s.substring(0, 10 - space.g.y.toString().length));
-        process.stdout.write('gz1: ' + space.g.z.toString() + s.substring(0, 10 - space.g.z.toString().length));
+        //process.stdout.write('gy1: ' + space.g.y.toString() + s.substring(0, 10 - space.g.y.toString().length));
+        //process.stdout.write('gz1: ' + space.g.z.toString() + s.substring(0, 10 - space.g.z.toString().length));
 
         var mxProjectionLength = Math.sqrt(space.m.y * space.m.y + space.m.z * space.m.z);
         var myzProjectionAngle = Math.acos(space.m.y / mxProjectionLength);
         space.m.y = space.m.y * Math.cos(myzProjectionAngle) - space.m.z * Math.sin(myzProjectionAngle);
         space.m.z = space.m.y * Math.sin(myzProjectionAngle) + space.m.z * Math.cos(myzProjectionAngle);
 
-        process.stdout.write('my1: ' + space.m.y.toString() + s.substring(0, 10 - space.m.y.toString().length));
-        process.stdout.write('mz1: ' + space.m.z.toString() + s.substring(0, 10 - space.m.z.toString().length));
+        //process.stdout.write('my1: ' + space.m.y.toString() + s.substring(0, 10 - space.m.y.toString().length));
+        //process.stdout.write('mz1: ' + space.m.z.toString() + s.substring(0, 10 - space.m.z.toString().length));
 
         var gzProjectionLength = Math.sqrt(space.g.y * space.g.y + space.g.x + space.g.x);
         var gyxProjectionAngle = Math.acos(space.g.y / gzProjectionLength);
         space.g.x = space.g.x * Math.cos(gyxProjectionAngle) - space.g.y * Math.sin(gyxProjectionAngle);
         space.g.y = space.g.x * Math.sin(gyxProjectionAngle) + space.g.y * Math.cos(gyxProjectionAngle);
 
-        process.stdout.write('gy1: ' + space.g.y.toString() + s.substring(0, 10 - space.g.y.toString().length));
-        process.stdout.write('gz1: ' + space.g.z.toString() + s.substring(0, 10 - space.g.z.toString().length));
+        //process.stdout.write('gy1: ' + space.g.y.toString() + s.substring(0, 10 - space.g.y.toString().length));
+        //process.stdout.write('gz1: ' + space.g.z.toString() + s.substring(0, 10 - space.g.z.toString().length));
 
         var mzProjectionLength = Math.sqrt(space.m.y * space.m.y + space.m.x + space.m.x);
         var myxProjectionAngle = Math.acos(space.m.y / mzProjectionLength);
         space.m.x = space.m.x * Math.cos(myxProjectionAngle) - space.m.y * Math.sin(myxProjectionAngle);
         space.m.y = space.m.x * Math.sin(myxProjectionAngle) + space.m.y * Math.cos(myxProjectionAngle);
 
-        process.stdout.write('my1: ' + space.m.y.toString() + s.substring(0, 10 - space.m.y.toString().length));
-        process.stdout.write('mz1: ' + space.m.z.toString() + s.substring(0, 10 - space.m.z.toString().length));
+        //process.stdout.write('my1: ' + space.m.y.toString() + s.substring(0, 10 - space.m.y.toString().length));
+        //process.stdout.write('mz1: ' + space.m.z.toString() + s.substring(0, 10 - space.m.z.toString().length));
 
         var ProjectionLength = Math.sqrt(space.m.x * space.m.x + space.m.z + space.m.z);
         var ProjectionAngle = Math.acos(space.m.x / ProjectionLength) * 180 / Math.PI;
 
-        console.log(ProjectionAngle);
+        console.log(ProjectionLength);
 
         if (dataQueue.length > config.MaxPackets) {
             dataQueue.pop();

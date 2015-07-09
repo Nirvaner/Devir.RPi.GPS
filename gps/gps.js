@@ -4,7 +4,7 @@ var space = rootRequire('gps/mpu9150.js');
 
 var dataQueue = [];
 
-//var s = '           ';
+var s = '           ';
 
 setInterval(function () {
     try {

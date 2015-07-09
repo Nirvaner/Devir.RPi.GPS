@@ -4,39 +4,33 @@ var space = rootRequire('gps/mpu9150.js');
 
 var dataQueue = [];
 
-var s = '           ';
+//var s = '           ';
 
 setInterval(function () {
     try {
-        process.stdout.write('gx: ' + space.g.x + s.substring(0, 10 - space.g.x.toString().length));
-        process.stdout.write('gy: ' + space.g.y + s.substring(0, 10 - space.g.y.toString().length));
-        process.stdout.write('gz: ' + space.g.z + s.substring(0, 10 - space.g.z.toString().length));
-        var gLength = Math.sqrt(space.g.x * space.g.x + space.g.y * space.g.y + space.g.z * space.g.z);
-        var gxAngle = Math.round(Math.acos(space.g.x / gLength) * 180 / Math.PI);
-        var gyAngle = Math.round(Math.acos(space.g.y / gLength) * 180 / Math.PI);
-        var gzAngle = Math.round(Math.acos(space.g.z / gLength) * 180 / Math.PI);
-        process.stdout.write('agx: ' + gxAngle + s.substring(0, 10 - gxAngle.toString().length));
-        process.stdout.write('agy: ' + gyAngle + s.substring(0, 10 - gyAngle.toString().length));
-        process.stdout.write('agz: ' + gzAngle + s.substring(0, 10 - gzAngle.toString().length));
+        var gxProjectionLength = Math.sqrt(space.g.y * space.g.y + space.g.z * space.g.z);
+        var gyzProjectionAngle = Math.acos(space.g.y / gxProjectionLength);
+        space.g.y = space.g.y * Math.cos(gyzProjectionAngle) - space.g.z * Math.sin(gyzProjectionAngle);
+        space.g.z = space.g.y * Math.sin(gyzProjectionAngle) + space.g.z * Math.cos(gyzProjectionAngle);
+        var mxProjectionLength = Math.sqrt(space.m.y * space.m.y + space.m.z * space.m.z);
+        var myzProjectionAngle = Math.acos(space.m.y / mxProjectionLength);
+        space.m.y = space.m.y * Math.cos(myzProjectionAngle) - space.m.z * Math.sin(myzProjectionAngle);
+        space.m.z = space.m.y * Math.sin(myzProjectionAngle) + space.m.z * Math.cos(myzProjectionAngle);
 
-        process.stdout.write('mx: ' + space.m.x + s.substring(0, 10 - space.m.x.toString().length));
-        process.stdout.write('my: ' + space.m.y + s.substring(0, 10 - space.m.y.toString().length));
-        process.stdout.write('mz: ' + space.m.z + s.substring(0, 10 - space.m.z.toString().length));
-        var mLength = Math.sqrt(space.m.x * space.m.x + space.m.y * space.m.y + space.m.z * space.m.z);
-        var mxAngle = Math.round(Math.acos(space.m.x / mLength) * 180 / Math.PI);
-        var myAngle = Math.round(Math.acos(space.m.y / mLength) * 180 / Math.PI);
-        var mzAngle = Math.round(Math.acos(space.m.z / mLength) * 180 / Math.PI);
-        process.stdout.write('amx: ' + mxAngle + s.substring(0, 10 - mxAngle.toString().length));
-        process.stdout.write('amy: ' + myAngle + s.substring(0, 10 - myAngle.toString().length));
-        process.stdout.write('amz: ' + mzAngle + s.substring(0, 10 - mzAngle.toString().length));
+        var gzProjectionLength = Math.sqrt(space.g.y * space.g.y + space.g.x + space.g.x);
+        var gyxProjectionAngle = Math.acos(space.g.y / gzProjectionLength);
+        space.g.x = space.g.x * Math.cos(gyxProjectionAngle) - space.g.y * Math.sin(gyxProjectionAngle);
+        space.g.y = space.g.x * Math.sin(gyxProjectionAngle) + space.g.y * Math.cos(gyxProjectionAngle);
+        var mzProjectionLength = Math.sqrt(space.m.y * space.m.y + space.m.x + space.m.x);
+        var myxProjectionAngle = Math.acos(space.m.y / mzProjectionLength);
+        space.m.x = space.m.x * Math.cos(myxProjectionAngle) - space.m.y * Math.sin(myxProjectionAngle);
+        space.m.y = space.m.x * Math.sin(myxProjectionAngle) + space.m.y * Math.cos(myxProjectionAngle);
 
-        //var scalGM = space.g.x * space.m.x + space.g.y * space.m.y + space.g.z * space.m.z;
-        //var angleGM = Math.round(Math.acos(scalGM / (gLength * mLength)) * 180 / Math.PI);
-        //var angleMGorizont = angleGM - 90;
+        var ProjectionLength = Math.sqrt(space.m.x * space.m.x + space.m.z + space.m.z);
+        var ProjectionAngle = Math.acos(space.m.x / ProjectionLength) * 180 / Math.PI;
 
-        //process.stdout('angle: ' + angleGM + s.substring(0, 10 - angleGM.toString().length));
+        console.log(ProjectionAngle);
 
-        console.log('');
         if (dataQueue.length > config.MaxPackets) {
             dataQueue.pop();
         }

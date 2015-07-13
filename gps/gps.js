@@ -10,7 +10,7 @@ setInterval(function () {
         var mLength = Math.sqrt(space.m.x * space.m.x + space.m.y * space.m.y + space.m.z * space.m.z);
 
         var angle = Math.acos(scal/(gLength * mLength)) * 180 / Math.PI - 90;
-        angle = config.angle / 90 * (90 - angle);
+        angle = config.Angle / 90 * (90 - angle);
 
         console.log(angle);
 

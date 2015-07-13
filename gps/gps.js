@@ -1,10 +1,7 @@
-var config = rootRequire('config.js');
 var gps = rootRequire('gps/gps6mv2.js');
 var space = rootRequire('gps/mpu9150.js');
 
 var dataQueue = [];
-
-var s = '           ';
 
 setInterval(function () {
     try {
@@ -13,6 +10,7 @@ setInterval(function () {
         var mLength = Math.sqrt(space.m.x * space.m.x + space.m.y * space.m.y + space.m.z * space.m.z);
 
         var angle = Math.acos(scal/(gLength * mLength)) * 180 / Math.PI - 90;
+        angle = config.angle / 90 * (90 - angle);
 
         console.log(angle);
 

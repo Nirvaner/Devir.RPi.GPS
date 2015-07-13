@@ -1,10 +1,24 @@
+global.rootPath = __dirname + '/';
 global.rootRequire = function(name){
-    return require(__dirname + '/' + name);
-}
-var config = rootRequire('config.js');
+    return require(rootPath + name);
+};
 
-var data = rootRequire('gps/gps.js');
-console.log('Started');
+var dataQueue = [];
+
+require('fs').readFile(rootPath + 'config.json', function(error, data){
+    if (error){
+        console.log('DevirReadConfigError: ', error);
+        process.exit();
+    }
+    global.config = JSON.parse(data);
+    dataQueue = rootRequire('gps/gps.js');
+    console.log('Started');
+    Start();
+});
+
+function Start(){
+
+}
 
 //function ModemReboot() {
 //    try {

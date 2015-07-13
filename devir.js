@@ -3,5 +3,253 @@ global.rootRequire = function(name){
 }
 var config = rootRequire('config.js');
 
-var gps = rootRequire('gps/gps.js');
+var data = rootRequire('gps/gps.js');
 console.log('Started');
+
+//function ModemReboot() {
+//    try {
+//        console.log('ModemReboot');
+//        modemPin.set(0);
+//        setTimeout(function () {
+//            try {
+//                modemPin.set(1);
+//                setTimeout(function () {
+//                    try {
+//                        fs.exists(config.ModemDevicePath, function (exists) {
+//                            if (exists) {
+//                                SakisReconnect();
+//                            } else {
+//                                ModemReboot();
+//                            }
+//                        });
+//                    } catch (error) {
+//                        console.log('ErrorManageModemRebootDeviceExists: ' + error);
+//                    }
+//                }, 10000);
+//            } catch (error) {
+//                console.log('ErrorManageModemRebootPinSet: ' + error);
+//            }
+//        }, 1000);
+//    } catch (error) {
+//        console.log('ErrorManageModemReboot: ' + error);
+//    }
+//}
+//
+//function SakisReconnect() {
+//    try {
+//        spawn('sakis3g', ['reconnect'], {stdio: 'inherit'}).on('exit', function (code) {
+//            if (code == 0) {
+//                ConnectToServers();
+//            } else {
+//                setTimeout(function () {
+//                    ConnectToServers();
+//                });//, 60000);
+//            }
+//        });
+//    } catch (error) {
+//        console.log('ErrorManageSakisReconnect: ' + error);
+//    }
+//}
+//
+//function ModemReconnect() {
+//    connectCount = 0;
+//    try {
+//        ServerSocket.destroy()
+//    } catch (error) {
+//    }
+//    try {
+//        console.log('ModemReconnect with: ' + isError);
+//        if (isError) {
+//            isError = false;
+//            ModemReboot();
+//        } else {
+//            isError = true;
+//            SakisReconnect();
+//        }
+//    } catch (error) {
+//        console.log('ErrorManageModemReconnect: ' + error);
+//    }
+//}
+//
+//function SocketError(error) {
+//    console.log('Error in socketToServer: ' + error);
+//}
+//function SocketClose(index) {
+//    return function () {
+//        try {
+//            connections.splice(index, 1);
+//            connectCount++;
+//            console.log('Close in socketToServer');
+//            if (connectCount == config.Servers.length) {
+//                Run();
+//            }
+//        } catch (error) {
+//            console.log('ErrorManageSocketClose: ' + error);
+//        }
+//    }
+//}
+//function SocketConnect(obj) {
+//    isError = false;
+//    return function () {
+//        try {
+//            clearTimeout(obj.timer);
+//            connectCount++;
+//            console.log('Connect in socketToServer ' + obj.index + ' ' + config.Servers[obj.index]);
+//            if (connectCount == config.Servers.length) {
+//                Run();
+//            }
+//        } catch (error) {
+//            console.log('ErrorManageSocketConnect: ' + error);
+//        }
+//    }
+//}
+//
+//function ConnectToServers() {
+//    try {
+//        config.Servers.forEach(function (item, index) {
+//            var socket = net.connect({host: item, port: config.ServicePort});
+//            var timer = setTimeout(function () {
+//                socket.destroy();
+//            }, config.ServerTimeout);
+//            socket.on('error', SocketError);
+//            socket.on('close', SocketClose(index));
+//            socket.on('connect', SocketConnect({
+//                index: index
+//                , timer: timer
+//            }));
+//            connections.push(socket);
+//        });
+//    } catch (error) {
+//        console.log('ErrorManageConnectToServers: ' + error);
+//    }
+//}
+//
+//console.log('Started');
+//
+//fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
+//    if (error) {
+//        console.log('Zander no started, config error: ' + error);
+//    } else {
+//        try {
+//            config = JSON.parse(data);
+//            modemPin = gpio.export(config.ModemPin, {
+//                direction: 'out',
+//                ready: function () {
+//                    modemPin.set(1);
+//                    setTimeout(ModemReconnect, 10000);
+//                }
+//            });
+//        } catch (error) {
+//            console.log('ErrorManageReadConfig: ' + error);
+//        }
+//    }
+//});
+//
+//function Run() {
+//    try {
+//        if (connections.length == 0){
+//            ModemReconnect();
+//        }
+//        connections.forEach(function (socket) {
+//            socket.on('close', function () {
+//                connectCount = 0;
+//            });
+//        });
+//        ServerSocket = connections.shift();
+//        for (var i = 0; i < connections.length; i++) {
+//            connections.shift().destroy();
+//        }
+//        console.log('pingTimer is start');
+//        pingTimer = setTimeout(ModemReconnect, 90000);
+//        console.log('Run');
+//        ServerSocket.write(config.Zander + '|' + config.Version + '||' + (siements ? '0' : '1'));
+//        ServerSocket.on('data', function (data) {
+//            try {
+//                if (pingTimer) {
+//                    console.log('pingTimer cleared');
+//                    clearTimeout(pingTimer);
+//                }
+//                var strData = data.toString();
+//                if (currentOperation == '') {
+//                    if (strData[0] == '0') {
+//                        console.log('ping');
+//                        ServerSocket.write('0');
+//                    } else if (strData.substring(0, 3) == 'run') {
+//                        console.log('run');
+//                        skd = spawn('sudo', ['-u', 'root', '-p', 'root', 'node', rootPath + 'skd/skd.js'], {stdio: 'inherit'});
+//                        skd.on('exit', function () {
+//                            console.log('Skd exit');
+//                            skd = null;
+//                        });
+//                        ServerSocket.write('0');
+//                    } else if (strData.substring(0, 3) == 'skd') {
+//                        console.log('skd');
+//                        currentOperation = 'skd';
+//                        ServerSocket.write(strData.substring(3));
+//                    } else if (strData.substring(0, 6) == 'reboot') {
+//                        console.log('reboot');
+//                        ServerSocket.write('0');
+//                        SysRestart();
+//                    } else if (strData.substring(0, 8) == 'datetime') {
+//                        console.log('datetime');
+//                        spawn('sudo', ['-u', 'root', '-p', 'root', 'date', '-s', strData.substring(8)], {stdio: 'inherit'});
+//                        ServerSocket.write('0');
+//                    } else if (strData.substring(0, 8) == 'settings') {
+//                        console.log('settings');
+//                        if (siements) {
+//                            console.log('Siements kill');
+//                            siements.on('exit', function () {
+//                                setTimeout(function () {
+//                                    ControllerSpawn();
+//                                    console.log('Controller run');
+//                                    SendToController('0' + config.Zander + '|' + strData.substring(8));
+//                                }, 10000);
+//                            });
+//                            spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
+//                        } else {
+//                            ControllerSpawn();
+//                            console.log('Controller run');
+//                            SendToController('0' + config.Zander + '|' + strData.substring(8));
+//                        }
+//                    } else if (strData.substring(0, 7) == 'gitpull') {
+//                        if (skd) {
+//                            spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', skd.pid], {stdio: 'inherit'});
+//                        }
+//                        if (siements) {
+//                            siements.on('exit', function () {
+//                                GitPull();
+//                            });
+//                            spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
+//                        } else {
+//                            GitPull();
+//                        }
+//                    } else {
+//                        console.log('unresolved data: ' + strData);
+//                    }
+//                } else {
+//                    if (currentOperation == 'skd') {
+//                        SendToSKD(strData);
+//                        currentOperation = '';
+//                    } else {
+//                        console.log('unresolved data: ' + strData);
+//                    }
+//                }
+//                console.log('pingTimer is start');
+//                pingTimer = setTimeout(ModemReconnect, 120000);
+//            } catch (error) {
+//                console.log('ErrorManageEventDataServer: ' + error);
+//            }
+//        });
+//    } catch (error) {
+//        console.log('ErrorManageRun: ' + error);
+//        ModemReconnect();
+//    }
+//}
+//
+//function SysRestart() {
+//    try {
+//        spawn('sudo', ['-u', 'root', '-p', 'root', 'reboot'], {stdio: 'inherit'});
+//    } catch (error) {
+//        console.log('ErrorManageSysRestart: ' + error);
+//    }
+//}

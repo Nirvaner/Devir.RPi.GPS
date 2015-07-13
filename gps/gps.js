@@ -8,39 +8,13 @@ var s = '           ';
 
 setInterval(function () {
     try {
-        var gyzProjectionLength = Math.sqrt(space.g.y * space.g.y + space.g.z * space.g.z);
-        console.log(gyzProjectionLength);
-        var gyzProjectionYAngle = Math.acos(space.g.y / gyzProjectionLength);
-        console.log(gyzProjectionYAngle);
-        space.g.y = space.g.y * Math.cos(gyzProjectionYAngle) - space.g.z * Math.sin(gyzProjectionYAngle);
-        space.g.z = space.g.y * Math.sin(gyzProjectionYAngle) + space.g.z * Math.cos(gyzProjectionYAngle);
+        var scal = space.g.x * space.m.x + space.g.y * space.m.y + space.g.z * space.m.z;
+        var gLength = Math.sqrt(space.g.x * space.g.x + space.g.y * space.g.y + space.g.z * space.g.z);
+        var mLength = Math.sqrt(space.m.x * space.m.x + space.m.y * space.m.y + space.m.z * space.m.z);
 
-        var myzProjectionLength = Math.sqrt(space.m.y * space.m.y + space.m.z * space.m.z);
-        console.log(myzProjectionLength);
-        var myzProjectionYAngle = Math.acos(space.m.y / myzProjectionLength);
-        console.log(myzProjectionYAngle);
-        space.m.y = space.m.y * Math.cos(myzProjectionYAngle) - space.m.z * Math.sin(myzProjectionYAngle);
-        space.m.z = space.m.y * Math.sin(myzProjectionYAngle) + space.m.z * Math.cos(myzProjectionYAngle);
+        var angle = Math.acos(scal/(gLength * mLength)) * 180 / Math.PI - 90;
 
-
-        var gyxProjectionLength = Math.sqrt(space.g.y * space.g.y + space.g.x + space.g.x);
-        console.log(gyxProjectionLength);
-        var gyxProjectionYAngle = Math.acos(space.g.y / gyxProjectionLength);
-        console.log(gyxProjectionYAngle);
-        space.g.x = space.g.x * Math.cos(gyxProjectionYAngle) - space.g.y * Math.sin(gyxProjectionYAngle);
-        space.g.y = space.g.x * Math.sin(gyxProjectionYAngle) + space.g.y * Math.cos(gyxProjectionYAngle);
-
-        var myxProjectionLength = Math.sqrt(space.m.y * space.m.y + space.m.x + space.m.x);
-        console.log(myxProjectionLength);
-        var myxProjectionYAngle = Math.acos(space.m.y / myxProjectionLength);
-        console.log(myxProjectionYAngle);
-        space.m.x = space.m.x * Math.cos(myxProjectionYAngle) - space.m.y * Math.sin(myxProjectionYAngle);
-        space.m.y = space.m.x * Math.sin(myxProjectionYAngle) + space.m.y * Math.cos(myxProjectionYAngle);
-
-        var ProjectionLength = Math.sqrt(space.m.x * space.m.x + space.m.z + space.m.z);
-        var ProjectionAngle = Math.acos(space.m.x / ProjectionLength) * 180 / Math.PI;
-
-        console.log(ProjectionLength);
+        console.log(angle);
 
         if (dataQueue.length > config.MaxPackets) {
             dataQueue.pop();

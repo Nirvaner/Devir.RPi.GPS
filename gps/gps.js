@@ -15,9 +15,11 @@ setInterval(function () {
         var lLength = Math.sqrt(lastMag.x * lastMag.x + lastMag.y * lastMag.y + lastMag.z * lastMag.z);
         var cLength = Math.sqrt(space.m.x * space.m.x + space.m.y * space.m.y + space.m.z * space.m.z);
         var a = Math.acos(scal / (lLength * cLength)) * 180 / Math.PI;
+        console.log('Angle: ', angle);
 
         var curCoor = {lat: gps.latitude, lon: gps.longitude};
         var distance = DistanceTo(lastCoor, curCoor);
+        console.log('Distance: ', distance);
 
         var time = (new Date() - lastTime) / 1000;
         console.log(time);
@@ -27,27 +29,27 @@ setInterval(function () {
             lastMag.y = space.m.y;
             lastMag.z = space.m.z;
             console.log('Logic packet');
+            if (dataQueue.length > config.MaxPackets) {
+                dataQueue.pop();
+            }
+            var buf = new Buffer(33);
+            buf.writeInt8(gps.year, 0);
+            buf.writeInt8(gps.month, 1);
+            buf.writeInt8(gps.day, 2);
+            buf.writeInt8(gps.hour, 3);
+            buf.writeInt8(gps.minute, 4);
+            buf.writeInt8(gps.second, 5);
+            buf.writeInt32BE(gps.longitude, 6);
+            buf.writeInt32BE(gps.latitude, 10);
+            buf.writeInt16BE(gps.altitude, 14);
+            buf.writeInt16BE(gps.angle, 16);
+            buf.writeInt16BE(gps.speed, 18);
+            buf.writeInt8(gps.satellites, 20);
+            buf.writeFloatBE(gps.pdop, 21);
+            buf.writeFloatBE(gps.hdop, 25);
+            buf.writeFloatBE(gps.vdop, 29);
+            //dataQueue.unshift(buf);
         }
-        if (dataQueue.length > config.MaxPackets) {
-            dataQueue.pop();
-        }
-        var buf = new Buffer(33);
-        buf.writeInt8(gps.year, 0);
-        buf.writeInt8(gps.month, 1);
-        buf.writeInt8(gps.day, 2);
-        buf.writeInt8(gps.hour, 3);
-        buf.writeInt8(gps.minute, 4);
-        buf.writeInt8(gps.second, 5);
-        buf.writeInt32BE(gps.longitude, 6);
-        buf.writeInt32BE(gps.latitude, 10);
-        buf.writeInt16BE(gps.altitude, 14);
-        buf.writeInt16BE(gps.angle, 16);
-        buf.writeInt16BE(gps.speed, 18);
-        buf.writeInt8(gps.satellites, 20);
-        buf.writeFloatBE(gps.pdop, 21);
-        buf.writeFloatBE(gps.hdop, 25);
-        buf.writeFloatBE(gps.vdop, 29);
-        //dataQueue.unshift(buf);
     }
     catch (error) {
         console.log('ErrorGpsLogicInterval: ');

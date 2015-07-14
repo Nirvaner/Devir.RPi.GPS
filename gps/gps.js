@@ -19,7 +19,7 @@ setInterval(function () {
 
         var curCoor = {lat: gps.latitude, lon: gps.longitude};
         var distance = DistanceTo(lastCoor, curCoor);
-        console.log('Distance: ', distance);
+        console.log('Distance: ', distance, lastCoor, curCoor);
 
         var time = (new Date() - lastTime) / 1000;
         console.log('Time: ', time);
@@ -28,7 +28,10 @@ setInterval(function () {
             lastMag.x = space.m.x;
             lastMag.y = space.m.y;
             lastMag.z = space.m.z;
-            console.log('Logic packet');
+            lastTime = new Date();
+            lastCoor.lat = curCoor.lat;
+            lastCoor.lon = curCoor.lon;
+            console.log('Logic packet++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
             if (dataQueue.length > config.MaxPackets) {
                 dataQueue.pop();
             }
@@ -61,10 +64,10 @@ module.exports = dataQueue;
 
 function DistanceTo(coor1, coor2) {
     const Radius = 6372795; // –ассто€ние от центра земли до поверхности в метрах
-    var lat1 = coor1.lat * Math.PI / 180;
-    var lat2 = coor2.lat * Math.PI / 180;
-    var lon1 = coor1.lon * Math.PI / 180;
-    var lon2 = coor2.lon * Math.PI / 180;
+    var lat1 = (coor1.lat / 10000000) * Math.PI / 180;
+    var lat2 = (coor2.lat / 10000000) * Math.PI / 180;
+    var lon1 = (coor1.lon / 10000000) * Math.PI / 180;
+    var lon2 = (coor2.lon / 10000000) * Math.PI / 180;
     var pLat = Math.pow(Math.sin((lat2 - lat1) / 2), 2);
     var pLon = Math.pow(Math.sin((lon2 - lon1) / 2), 2);
     var result = 2 * Math.asin(Math.sqrt(pLat + Math.cos(lat1) * Math.cos(lat2) * pLon));

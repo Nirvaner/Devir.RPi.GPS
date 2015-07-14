@@ -7,6 +7,8 @@
   ]
   , "Port": 11111
   , "Angle": 20
+  , "Distance": 500
+  , "Time": 7200
   , "MaxPackets": 10000
   , "MinPackets": 1
 }

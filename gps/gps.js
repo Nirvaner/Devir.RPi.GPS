@@ -3,17 +3,30 @@ var space = rootRequire('gps/mpu9150.js');
 
 var dataQueue = [];
 
+var angle = config.Angle / 2;
+var lastMag = {x: 1, y: 1, z: 1};
+
+var lastTime = new Date();
+var lastCoor = {lat: 0, lon: 0};
+
 setInterval(function () {
     try {
-        var scal = space.g.x * space.m.x + space.g.y * space.m.y + space.g.z * space.m.z;
-        var gLength = Math.sqrt(space.g.x * space.g.x + space.g.y * space.g.y + space.g.z * space.g.z);
-        var mLength = Math.sqrt(space.m.x * space.m.x + space.m.y * space.m.y + space.m.z * space.m.z);
+        var scal = lastMag.x * space.m.x + lastMag.y * space.m.y + lastMag.z * space.m.z;
+        var lLength = Math.sqrt(lastMag.x * lastMag.x + lastMag.y * lastMag.y + lastMag.z * lastMag.z);
+        var cLength = Math.sqrt(space.m.x * space.m.x + space.m.y * space.m.y + space.m.z * space.m.z);
+        var a = Math.acos(scal / (lLength * cLength)) * 180 / Math.PI;
 
-        var angle = Math.acos(scal/(gLength * mLength)) * 180 / Math.PI - 90;
-        angle = config.Angle / 90 * (90 - angle);
+        var distance = DistanceTo(lastCoor, gps);
 
-        console.log(angle);
+        var time = (new Date() - lastTime)/1000;
+        console.log(time);
 
+        if ((a > angle) || (distance > config.Distance) || (time > config.Time)) {
+            lastMag.x = space.m.x;
+            lastMag.y = space.m.y;
+            lastMag.z = space.m.z;
+            console.log('Logic packet');
+        }
         if (dataQueue.length > config.MaxPackets) {
             dataQueue.pop();
         }
@@ -39,6 +52,18 @@ setInterval(function () {
         console.log('ErrorGpsLogicInterval: ');
         console.log(error);
     }
-}, 1000);
+}, 500);
 
 module.exports = dataQueue;
+
+function DistanceTo(coor1, coor2) {
+    const Radius = 6372795; // –ассто€ние от центра земли до поверхности в метрах
+    var lat1 = coor1.lat * Math.PI / 180;
+    var lat2 = coor2.lat * Math.PI / 180;
+    var lon1 = coor1.lon * Math.PI / 180;
+    var lon2 = coor2.lon * Math.PI / 180;
+    var pLat = Math.pow(Math.Sin((lat2 - lat1) / 2), 2);
+    var pLon = Math.pow(Math.Sin((lon2 - lon1) / 2), 2);
+    var result = 2 * Math.asin(Math.sqrt(pLat + Math.cos(lat1) * Math.cos(lat2) * pLon));
+    return result * Radius;
+}

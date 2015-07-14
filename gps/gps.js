@@ -15,11 +15,11 @@ setInterval(function () {
         var lLength = Math.sqrt(lastMag.x * lastMag.x + lastMag.y * lastMag.y + lastMag.z * lastMag.z);
         var cLength = Math.sqrt(space.m.x * space.m.x + space.m.y * space.m.y + space.m.z * space.m.z);
         var a = Math.acos(scal / (lLength * cLength)) * 180 / Math.PI;
-        console.log('Angle: ', a);
 
-        var distance = DistanceTo(lastCoor, gps);
+        var curCoor = {lat: gps.latitude, lon: gps.longitude};
+        var distance = DistanceTo(lastCoor, curCoor);
 
-        var time = (new Date() - lastTime)/1000;
+        var time = (new Date() - lastTime) / 1000;
         console.log(time);
 
         if ((a > angle) || (distance > config.Distance) || (time > config.Time)) {

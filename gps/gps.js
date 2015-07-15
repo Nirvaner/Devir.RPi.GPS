@@ -1,7 +1,7 @@
 var gps = rootRequire('gps/gps6mv2.js');
 var space = rootRequire('gps/mpu9150.js');
 
-var dataQueue = [];
+var gpsQueue = [];
 
 var angle = config.Angle / 2;
 var lastMag = {x: 1, y: 1, z: 1};
@@ -32,8 +32,8 @@ setInterval(function () {
             lastCoor.lat = curCoor.lat;
             lastCoor.lon = curCoor.lon;
             console.log('Logic packet++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-            if (dataQueue.length > config.MaxPackets) {
-                dataQueue.pop();
+            if (gpsQueue.length > config.MaxPackets) {
+                gpsQueue.pop();
             }
             var buf = new Buffer(33);
             buf.writeInt8(gps.year, 0);
@@ -51,7 +51,7 @@ setInterval(function () {
             buf.writeFloatBE(gps.pdop, 21);
             buf.writeFloatBE(gps.hdop, 25);
             buf.writeFloatBE(gps.vdop, 29);
-            //dataQueue.unshift(buf);
+            gpsQueue.unshift(buf);
         }
     }
     catch (error) {
@@ -60,7 +60,36 @@ setInterval(function () {
     }
 }, 500);
 
-module.exports = dataQueue;
+var sendDelay = 0;
+
+setInterval(function () {
+    if (gpsQueue.length > 0) {
+        var packet = gpsQueue.pop();
+        var gpsPacketSocket = net.connect(config.GpsPacketSocket);
+        gpsPacketSocket.on('connect', function () {
+            gpsPacketSocket.send(packet);
+            gpsPacketSocket.close();
+            if (gpsQueue.length == 0) {
+                sendDelay = 10000;
+            }else{
+                sendDelay = 0;
+            }
+        });
+        gpsPacketSocket.on('error', function (error) {
+            SendGpsQueueDelay = 10;
+            console.log('Devir > SendGpsQueue > GpsPacketSocket > Error: ', error);
+        });
+        gpsPacketSocket.on('close', function () {
+            try {
+                gpsPacketSocket.destroy();
+            } catch (error) {
+                console.log('Devir > SendGpsQueue > GpsPacketSocket > Destroy > Error: ', error);
+            }
+        });
+    }
+}, sendDelay);
+
+// Helpers
 
 function DistanceTo(coor1, coor2) {
     const Radius = 6372795; // –ассто€ние от центра земли до поверхности в метрах
@@ -71,5 +100,6 @@ function DistanceTo(coor1, coor2) {
     var pLat = Math.pow(Math.sin((lat2 - lat1) / 2), 2);
     var pLon = Math.pow(Math.sin((lon2 - lon1) / 2), 2);
     var result = 2 * Math.asin(Math.sqrt(pLat + Math.cos(lat1) * Math.cos(lat2) * pLon));
-    return result * Radius;
+    result =result * Radius;
+    return result;
 }

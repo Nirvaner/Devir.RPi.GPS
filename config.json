@@ -5,10 +5,13 @@
     , "devir.kz"
     ,"192.168.66.100"
   ]
-  , "Port": 11111
+  , "Port": 11110
+  , "GpsPacketSocket": {
+    "host": "89.218.66.54"
+    , "port": 11111
+  }
+  , "ModemPin": 16
   , "Angle": 20
   , "Distance": 500
   , "Time": 7200
-  , "MaxPackets": 10000
-  , "MinPackets": 1
 }

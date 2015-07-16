@@ -1,4 +1,5 @@
 var spawn = require('child_process').spawn;
+var fs = require('fs');
 var gpio = require('gpio');
 function pinSet(value) {
     return value; // value for transistor, ~ value for relay
@@ -30,15 +31,15 @@ function ModemReboot() {
                             }
                         });
                     } catch (error) {
-                        console.log('ErrorManageModemRebootDeviceExists: ' + error);
+                        console.log('modem3g > ModemReboot > DeviceExists > Error: ' + error);
                     }
                 }, 10000);
             } catch (error) {
-                console.log('ErrorManageModemRebootPinSet: ' + error);
+                console.log('modem3g > ModemReboot > PinSet > Error: ' + error);
             }
         }, 1000);
     } catch (error) {
-        console.log('ErrorManageModemReboot: ' + error);
+        console.log('modem3g > ModemReboot > Error: ' + error);
     }
 }
 
@@ -54,7 +55,7 @@ function SakisReconnect() {
             }
         });
     } catch (error) {
-        console.log('ErrorManageSakisReconnect: ' + error);
+        console.log('modem3g > SakisReconnect > Error: ' + error);
     }
 }
 
@@ -70,7 +71,7 @@ function Reconnect(callback) {
             SakisReconnect();
         }
     } catch (error) {
-        console.log('ErrorManageModemReconnect: ' + error);
+        console.log('modem3g > Reconnect > Error: ' + error);
     }
 }
 

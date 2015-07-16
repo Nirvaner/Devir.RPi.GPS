@@ -36,11 +36,11 @@ function Run() {
                 console.log('SocketServer > Run > Message: pingTimer is start');
                 pingTimer = setTimeout(modem3g.reconnect(ConnectToServer), 120000);
             } catch (error) {
-                console.log('ErrorManageEventDataServer: ' + error);
+                console.log('SocketServer > Run > Error: ' + error);
             }
         });
     } catch (error) {
-        console.log('ErrorManageRun: ' + error);
+        console.log('SocketServer > Run > Error: ' + error);
         modem3g.reconnect(ConnectToServer);
     }
 }
@@ -58,7 +58,7 @@ function SocketClose(index) {
                 Run();
             }
         } catch (error) {
-            console.log('ErrorManageSocketClose: ' + error);
+            console.log('SocketServer > SocketClose > Error: ' + error);
         }
     }
 }

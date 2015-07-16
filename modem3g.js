@@ -51,7 +51,7 @@ function SakisReconnect() {
             } else {
                 setTimeout(function () {
                     Reconnect(); // Sakis not have connect
-                }, 60000);
+                }, 10000);
             }
         });
     } catch (error) {

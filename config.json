@@ -10,6 +10,7 @@
     "host": "89.218.66.54"
     , "port": 11111
   }
+  , "ModemDevicePath": "/dev/ttyUSB0"
   , "ModemPin": 16
   , "Angle": 20
   , "Distance": 500

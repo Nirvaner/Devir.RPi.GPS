@@ -1,3 +1,4 @@
+var spawn = require('child_process').spawn;
 var gpio = require('gpio');
 function pinSet(value) {
     return value; // value for transistor, ~ value for relay

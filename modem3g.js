@@ -1,10 +1,12 @@
+const usbPath = '/sys/bus/usb/drivers/usb/';
+
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 var gpio = require('gpio');
 function pinSet(value) {
     return value; // value for transistor, ~ value for relay
 }
-var modemPin = gpio.export(config.ModemPin, {
+var modemPin = gpio.export(config.Modem.Pin, {
     direction: 'out',
     ready: function () {
         modemPin.set(pinSet(1));
@@ -17,6 +19,14 @@ var isError = false;
 function ModemReboot() {
     try {
         console.log('ModemReboot');
+        var dirs = fs.readdirSync(usbPath).filter(function(file){
+            return fs.statSync(usbPath + file).isDirectory();
+        });
+        dirs.forEach(function(dir, index){
+            if (fs.existsSync(dir + '/idVendor') && fs.readFileSync(dir + '/idVendor') == config.Modem.Vendor){
+                fs.appendFileSync(usbPath + 'unbind', dir);
+            }
+        });
         modemPin.set(0);
         setTimeout(function () {
             try {
@@ -38,6 +48,7 @@ function ModemReboot() {
                 console.log('modem3g > ModemReboot > PinSet > Error: ' + error);
             }
         }, 1000);
+
     } catch (error) {
         console.log('modem3g > ModemReboot > Error: ' + error);
     }

@@ -1,18 +1,23 @@
 {
-  "Imei": "000000000000000"
-  , "Servers": [
-    "89.218.66.54"
-    , "devir.kz"
-    ,"192.168.66.100"
-  ]
-  , "Port": 11110
-  , "GpsPacketSocket": {
-    "host": "89.218.66.54"
-    , "port": 11111
+  "Imei": "000000000000000",
+  "Servers": [
+    "89.218.66.54",
+    "devir.kz",
+    "192.168.66.100"
+  ],
+  "Port": 11110,
+  "GpsPacketSocket": {
+    "host": "89.218.66.54",
+    "port": 11111
+  },
+  "Angle": 20,
+  "Distance": 500,
+  "Time": 7200,
+  "Modem": {
+    "Path": "/dev/ttyUSB0",
+    "Pin": 16,
+    "Vendor": "12d1",
+    "Product": "1001",
+    "ProductStorage": "1446"
   }
-  , "ModemDevicePath": "/dev/ttyUSB0"
-  , "ModemPin": 16
-  , "Angle": 20
-  , "Distance": 500
-  , "Time": 7200
 }

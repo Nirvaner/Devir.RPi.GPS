@@ -34,7 +34,7 @@ function ModemReboot() {
                     modemPin.set(1);
                     setTimeout(function () {
                         try {
-                            fs.exists(config.ModemDevicePath, function (exists) {
+                            fs.exists(config.Modem.Path, function (exists) {
                                 if (exists) {
                                     SakisReconnect();
                                 } else {

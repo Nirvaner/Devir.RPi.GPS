@@ -27,26 +27,28 @@ function ModemReboot() {
                 fs.appendFileSync(usbPath + 'unbind', dir);
             }
         });
-        modemPin.set(0);
-        setTimeout(function () {
-            try {
-                modemPin.set(1);
-                setTimeout(function () {
-                    try {
-                        fs.exists(config.ModemDevicePath, function (exists) {
-                            if (exists) {
-                                SakisReconnect();
-                            } else {
-                                ModemReboot();
-                            }
-                        });
-                    } catch (error) {
-                        console.log('modem3g > ModemReboot > DeviceExists > Error: ' + error);
-                    }
-                }, 10000);
-            } catch (error) {
-                console.log('modem3g > ModemReboot > PinSet > Error: ' + error);
-            }
+        setTimeout(function() {
+            modemPin.set(0);
+            setTimeout(function () {
+                try {
+                    modemPin.set(1);
+                    setTimeout(function () {
+                        try {
+                            fs.exists(config.ModemDevicePath, function (exists) {
+                                if (exists) {
+                                    SakisReconnect();
+                                } else {
+                                    ModemReboot();
+                                }
+                            });
+                        } catch (error) {
+                            console.log('modem3g > ModemReboot > DeviceExists > Error: ' + error);
+                        }
+                    }, 10000);
+                } catch (error) {
+                    console.log('modem3g > ModemReboot > PinSet > Error: ' + error);
+                }
+            }, 1000);
         }, 1000);
 
     } catch (error) {

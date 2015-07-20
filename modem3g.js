@@ -75,7 +75,6 @@ function SakisReconnect() {
 function Reconnect(callback) {
     try {
         reconnectCallback = callback;
-        console.log('modem3g > Reconnect > Message: callback is ', callback, 'and', reconnectCallback);
         console.log('ModemReconnect with: ' + isError);
         if (isError) {
             isError = false;

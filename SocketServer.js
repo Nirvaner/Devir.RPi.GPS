@@ -1,3 +1,5 @@
+var net = require('net');
+
 var modem3g = rootRequire('modem3g.js');
 
 var pingTimer;

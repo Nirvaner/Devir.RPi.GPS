@@ -11,6 +11,7 @@ function Run() {
         try {
             if (connections.length == 0) {
                 modem3g.reconnect(ConnectToServer);
+                return;
             }
             connections.forEach(function (socket) {
                 socket.on('close', function () {

@@ -25,7 +25,7 @@ function ModemReboot() {
             });
             console.log('modem3g > ModemReboot > Dirs:', dirs);
             dirs.forEach(function (dir) {
-                if (fs.existsSync(dir + '/idVendor') && fs.readFileSync(dir + '/idVendor') == config.Modem.Vendor) {
+                if (fs.existsSync(usbPath + dir + '/idVendor') && fs.readFileSync(usbPath + dir + '/idVendor') == config.Modem.Vendor) {
                     fs.appendFileSync(usbPath + 'unbind', dir);
                 }
             });

@@ -63,7 +63,7 @@ function SakisReconnect() {
                 reconnectCallback();
             } else {
                 setTimeout(function () {
-                    Reconnect(); // Sakis not have connect
+                    Reconnect(reconnectCallback); // Sakis not have connect
                 }, 10000);
             }
         });

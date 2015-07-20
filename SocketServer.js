@@ -98,5 +98,6 @@ function ConnectToServer() {
 }
 
 module.exports.Start = function () {
+    console.log('SocketServer > Start > Message: modem3g.reconnect(%s)', ConnectToServer);
     modem3g.reconnect(ConnectToServer);
 };

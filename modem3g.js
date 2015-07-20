@@ -22,7 +22,7 @@ function ModemReboot() {
         var dirs = fs.readdirSync(usbPath).filter(function(file){
             return fs.statSync(usbPath + file).isDirectory();
         });
-        dirs.forEach(function(dir, index){
+        dirs.forEach(function(dir){
             if (fs.existsSync(dir + '/idVendor') && fs.readFileSync(dir + '/idVendor') == config.Modem.Vendor){
                 fs.appendFileSync(usbPath + 'unbind', dir);
             }
@@ -75,6 +75,7 @@ function SakisReconnect() {
 function Reconnect(callback) {
     try {
         reconnectCallback = callback;
+        console.log('modem3g > Reconnect > Message: callback is ', callback, 'and', reconnectCallback);
         console.log('ModemReconnect with: ' + isError);
         if (isError) {
             isError = false;

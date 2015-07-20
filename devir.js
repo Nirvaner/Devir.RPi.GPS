@@ -7,10 +7,11 @@ var net = require('net');
 
 require('fs').readFile(rootPath + 'config.json', 'utf8', function (error, data) {
     if (error) {
-        console.log('DevirReadConfigError: ', error);
+        console.log('Devir > ReadConfig > Error: ', error);
         process.exit();
     }
     global.config = JSON.parse(data);
+    console.log('Devir > fs > Message: SocketServer.Start()');
     rootRequire('SocketServer.js').Start();
 });
 
@@ -22,6 +23,6 @@ function SysRestart() {
     try {
         spawn('sudo', ['-u', 'root', '-p', 'root', 'reboot'], {stdio: 'inherit'});
     } catch (error) {
-        console.log('ErrorManageSysRestart: ' + error);
+        console.log('Devir > SysRestart > Error: ' + error);
     }
 }

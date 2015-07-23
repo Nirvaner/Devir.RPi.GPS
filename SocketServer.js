@@ -27,7 +27,7 @@ function Run() {
             console.log('SocketServer > Run > Message: pingTimer is start');
             pingTimer = setTimeout(modem3g.reconnect(ConnectToServer), 90000);
             console.log('Run');
-            ServerSocket.write(config.Zander + '|' + config.Version);
+            ServerSocket.write(config.Imei + '|' + config.Version);
             ServerSocket.on('data', function (data) {
                 try {
                     if (pingTimer) {
@@ -47,22 +47,7 @@ function Run() {
                         spawn('sudo', ['-u', 'root', '-p', 'root', 'date', '-s', strData.substring(8)], {stdio: 'inherit'});
                         ServerSocket.write('0');
                     } else if (strData.substring(0, 8) == 'settings') {
-                        console.log('settings');
-                        if (siements) {
-                            console.log('Siements kill');
-                            siements.on('exit', function () {
-                                setTimeout(function () {
-                                    ControllerSpawn();
-                                    console.log('Controller run');
-                                    SendToController('0' + config.Zander + '|' + strData.substring(8));
-                                }, 10000);
-                            });
-                            spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
-                        } else {
-                            ControllerSpawn();
-                            console.log('Controller run');
-                            SendToController('0' + config.Zander + '|' + strData.substring(8));
-                        }
+
                     } else if (strData.substring(0, 7) == 'gitpull') {
                         if (skd) {
                             spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', skd.pid], {stdio: 'inherit'});

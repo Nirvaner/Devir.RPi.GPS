@@ -1,5 +1,3 @@
-const usbPath = '/sys/bus/usb/drivers/usb/';
-
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 var gpio = require('gpio');
@@ -8,6 +6,7 @@ function ModemPinSet(value) {
 }
 var modemPin = gpio.export(config.Modem.Pin, {
     direction: 'out',
+    interval: 10000,
     ready: function () {
         ModemPinSet(1);
     }
@@ -19,16 +18,6 @@ var isError = false;
 function ModemReboot() {
     setTimeout(function() {
         try {
-            console.log('ModemReboot');
-            var dirs = fs.readdirSync(usbPath).filter(function (file) {
-                return fs.statSync(usbPath + file).isDirectory();
-            });
-            console.log('modem3g > ModemReboot > Dirs:', dirs);
-            dirs.forEach(function (dir) {
-                if (fs.existsSync(usbPath + dir + '/idVendor') && fs.readFileSync(usbPath + dir + '/idVendor') == config.Modem.Vendor) {
-                    fs.appendFileSync(usbPath + 'unbind', dir);
-                }
-            });
             setTimeout(function () {
                 ModemPinSet(0);
                 setTimeout(function () {

@@ -70,7 +70,7 @@ function Reconnect(callback) {
     setTimeout(function() {
         try {
             reconnectCallback = callback;
-            console.log('ModemReconnect with: ' + isError);
+            console.log('modem3g > Reconnect > Message: ' + isError);
             if (isError) {
                 isError = false;
                 ModemReboot();

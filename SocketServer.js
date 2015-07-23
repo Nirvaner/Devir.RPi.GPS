@@ -27,7 +27,7 @@ function Run() {
             console.log('SocketServer > Run > Message: pingTimer is start');
             pingTimer = setTimeout(modem3g.reconnect(ConnectToServer), 90000);
             console.log('Run');
-            ServerSocket.write(config.Zander + '|' + config.Version + '||' + (siements ? '0' : '1'));
+            ServerSocket.write(config.Zander + '|' + config.Version);
             ServerSocket.on('data', function (data) {
                 try {
                     if (pingTimer) {
@@ -81,7 +81,7 @@ function Run() {
                     console.log('SocketServer > Run > Message: pingTimer is start');
                     pingTimer = setTimeout(modem3g.reconnect(ConnectToServer), 120000);
                 } catch (error) {
-                    console.log('SocketServer > Run > Error: ' + error);
+                    console.log('SocketServer > Run > ServerSocketEventData > Error: ' + error);
                 }
             });
         } catch (error) {

@@ -2,12 +2,14 @@ var net = require('net');
 
 var modem3g = rootRequire('modem3g.js');
 
+var ServerSocket;
+
 var pingTimer;
 var connections = [];
 var connectCount = 0;
 
 function Run() {
-    setTimeout(function() {
+    setTimeout(function () {
         try {
             if (connections.length == 0) {
                 modem3g.reconnect(ConnectToServer);
@@ -36,6 +38,45 @@ function Run() {
                     if (strData[0] == '0') {
                         console.log('ping');
                         ServerSocket.write('0');
+                    } else if (strData.substring(0, 6) == 'reboot') {
+                        console.log('reboot');
+                        ServerSocket.write('0');
+                        SysRestart();
+                    } else if (strData.substring(0, 8) == 'datetime') {
+                        console.log('datetime');
+                        spawn('sudo', ['-u', 'root', '-p', 'root', 'date', '-s', strData.substring(8)], {stdio: 'inherit'});
+                        ServerSocket.write('0');
+                    } else if (strData.substring(0, 8) == 'settings') {
+                        console.log('settings');
+                        if (siements) {
+                            console.log('Siements kill');
+                            siements.on('exit', function () {
+                                setTimeout(function () {
+                                    ControllerSpawn();
+                                    console.log('Controller run');
+                                    SendToController('0' + config.Zander + '|' + strData.substring(8));
+                                }, 10000);
+                            });
+                            spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
+                        } else {
+                            ControllerSpawn();
+                            console.log('Controller run');
+                            SendToController('0' + config.Zander + '|' + strData.substring(8));
+                        }
+                    } else if (strData.substring(0, 7) == 'gitpull') {
+                        if (skd) {
+                            spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', skd.pid], {stdio: 'inherit'});
+                        }
+                        if (siements) {
+                            siements.on('exit', function () {
+                                GitPull();
+                            });
+                            spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
+                        } else {
+                            GitPull();
+                        }
+                    } else {
+                        console.log('unresolved data: ' + strData);
                     }
                     console.log('SocketServer > Run > Message: pingTimer is start');
                     pingTimer = setTimeout(modem3g.reconnect(ConnectToServer), 120000);
@@ -83,7 +124,7 @@ function SocketConnect(obj) {
 }
 
 function ConnectToServer() {
-    setTimeout(function() {
+    setTimeout(function () {
         try {
             connectCount = 0;
             config.Servers.forEach(function (host, index) {
@@ -108,3 +149,26 @@ function ConnectToServer() {
 module.exports.Start = function () {
     modem3g.reconnect(ConnectToServer);
 };
+
+// Helpers
+
+function GitPull() {
+    setTimeout(function() {
+        try {
+            ServerSocket.write('0');
+            ServerSocket.end();
+            spawn('bash', [rootPath + '../gitpull.sh'], {stdio: 'inherit'});
+            process.exit(0);
+        } catch (error) {
+            console.log('ErrorManageGitPull: ' + error);
+        }
+    });
+}
+
+function SysRestart() {
+    try {
+        spawn('sudo', ['-u', 'root', '-p', 'root', 'reboot'], {stdio: 'inherit'});
+    } catch (error) {
+        console.log('Devir > SysRestart > Error: ' + error);
+    }
+}

@@ -18,11 +18,3 @@ require('fs').readFile(rootPath + 'config.json', 'utf8', function (error, data) 
 
 
 // Helpers
-
-function SysRestart() {
-    try {
-        spawn('sudo', ['-u', 'root', '-p', 'root', 'reboot'], {stdio: 'inherit'});
-    } catch (error) {
-        console.log('Devir > SysRestart > Error: ' + error);
-    }
-}

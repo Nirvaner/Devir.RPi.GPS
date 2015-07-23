@@ -82,9 +82,9 @@ function SocketError(error) {
 function SocketClose(index) {
     return function () {
         try {
-            var socket = connections.splice(index, 1);
+            connections.splice(index, 1);
             connectCount++;
-            console.log('SocketServer > SocketClose > Message:', socket.host);
+            console.log('SocketServer > SocketClose > Message:', config.Servers[index]);
             if (connectCount == config.Servers.length) {
                 Run();
             }

@@ -13,6 +13,7 @@ function Run() {
     setTimeout(function () {
         try {
             if (connections.length == 0) {
+                console.log('ServerSocket > Run > Message: connections length is 0');
                 modem3g.reconnect(ConnectToServer);
                 return;
             }
@@ -23,12 +24,14 @@ function Run() {
             });
             ServerSocket = connections.shift();
             for (var i = 0; i < connections.length; i++) {
+                console.log('SocketServer > Run > Message: connections destroy');
                 connections.shift().destroy();
             }
             console.log('SocketServer > Run > Message: pingTimer is start');
             pingTimer = setTimeout(modem3g.reconnect(ConnectToServer), 90000);
             console.log('Run');
             ServerSocket.write(config.Imei + '|' + config.Version);
+            console.log('ServerSocket > Run > Message: ServerSocket write done, watch serverSocket event "data"');
             ServerSocket.on('data', function (data) {
                 try {
                     if (pingTimer) {

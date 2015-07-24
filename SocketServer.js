@@ -28,7 +28,10 @@ function Run() {
                 connections.shift().destroy();
             }
             console.log('SocketServer > Run > Message: pingTimer is start');
-            pingTimer = setTimeout(modem3g.reconnect(ConnectToServer), 90000);
+            pingTimer = setTimeout(function() {
+                console.log('SocketServer > Run > Message: pingTimer90000 run');
+                modem3g.reconnect(ConnectToServer);
+            }, 90000);
             console.log('Run');
             ServerSocket.write(config.Imei + '|' + config.Version);
             console.log('ServerSocket > Run > Message: ServerSocket write done, watch serverSocket event "data"');
@@ -68,7 +71,10 @@ function Run() {
                         console.log('unresolved data: ' + strData);
                     }
                     console.log('SocketServer > Run > Message: pingTimer is start');
-                    pingTimer = setTimeout(modem3g.reconnect(ConnectToServer), 120000);
+                    pingTimer = setTimeout(function() {
+                        console.log('SocketServer > Run > Message: pingTimer120000 run');
+                        modem3g.reconnect(ConnectToServer);
+                    }, 120000);
                 } catch (error) {
                     console.log('SocketServer > Run > ServerSocketEventData > Error: ' + error);
                 }

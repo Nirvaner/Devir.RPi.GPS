@@ -69,7 +69,7 @@ setInterval(function () {
         var packet = gpsQueue.pop();
         var gpsPacketSocket = net.connect(config.GpsPacketSocket);
         gpsPacketSocket.on('connect', function () {
-            gpsPacketSocket.send(packet);
+            gpsPacketSocket.write(packet);
             gpsPacketSocket.close();
             if (gpsQueue.length == 0) {
                 sendDelay = 10000;

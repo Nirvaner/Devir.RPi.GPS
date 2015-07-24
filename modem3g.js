@@ -53,6 +53,7 @@ function SakisReconnect() {
         try {
             spawn('sakis3g', ['reconnect'], {stdio: 'inherit'}).on('exit', function (code) {
                 if (code == 0) {
+                    isError = false;
                     reconnectCallback();
                 } else {
                     setTimeout(function () {

@@ -12,7 +12,6 @@ var connectCount = 0;
 function Run() {
     setTimeout(function () {
         try {
-            console.log('SocketServer > Run > Message: connections is', connections);
             if (connections.length == 0) {
                 console.log('ServerSocket > Run > Message: connections length is 0');
                 modem3g.reconnect(ConnectToServer);

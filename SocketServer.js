@@ -1,4 +1,5 @@
 var net = require('net');
+var spawn = require('child_process').spawn;
 
 var modem3g = rootRequire('modem3g.js');
 

@@ -69,8 +69,9 @@ setInterval(function () {
         var packet = gpsQueue.pop();
         var gpsPacketSocket = net.connect(config.GpsPacketSocket);
         gpsPacketSocket.on('connect', function () {
-            gpsPacketSocket.write(packet);
-            gpsPacketSocket.close();
+            gpsPacketSocket.write(packet, function(){
+                gpsPacketSocket.destroy();
+            });
             if (gpsQueue.length == 0) {
                 sendDelay = 10000;
             }else{

@@ -76,7 +76,7 @@ setInterval(function () {
             }
         });
         gpsPacketSocket.on('error', function (error) {
-            SendGpsQueueDelay = 10;
+            sendDelay = 1000;
             console.log('Devir > SendGpsQueue > GpsPacketSocket > Error: ', error);
         });
         gpsPacketSocket.on('close', function () {

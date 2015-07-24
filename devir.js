@@ -13,6 +13,7 @@ require('fs').readFile(rootPath + 'config.json', 'utf8', function (error, data) 
     global.config = JSON.parse(data);
     console.log('Devir > fs > Message: SocketServer.Start()');
     rootRequire('SocketServer.js').Start();
+    rootRequire('gps/gps.js');
 });
 
 

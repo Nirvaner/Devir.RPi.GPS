@@ -27,7 +27,7 @@ function Run() {
                 console.log('SocketServer > Run > Message: connections destroy');
                 connections.shift().destroy();
             }
-            console.log('SocketServer > Run > Message: pingTimer is start');
+            //console.log('SocketServer > Run > Message: pingTimer is start');
             pingTimer = setTimeout(function() {
                 console.log('SocketServer > Run > Message: pingTimer90000 run');
                 modem3g.reconnect(ConnectToServer);
@@ -38,7 +38,7 @@ function Run() {
             ServerSocket.on('data', function (data) {
                 try {
                     if (pingTimer) {
-                        console.log('SocketServer > Run > Message: pingTimer cleared');
+                        //console.log('SocketServer > Run > Message: pingTimer cleared');
                         clearTimeout(pingTimer);
                     }
                     var strData = data.toString();
@@ -70,7 +70,7 @@ function Run() {
                     } else {
                         console.log('unresolved data: ' + strData);
                     }
-                    console.log('SocketServer > Run > Message: pingTimer is start');
+                    //console.log('SocketServer > Run > Message: pingTimer is start');
                     pingTimer = setTimeout(function() {
                         console.log('SocketServer > Run > Message: pingTimer120000 run');
                         modem3g.reconnect(ConnectToServer);

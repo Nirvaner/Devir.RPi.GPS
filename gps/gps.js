@@ -1,3 +1,5 @@
+var net = require('net');
+
 var gps = rootRequire('gps/gps6mv2.js');
 var space = rootRequire('gps/mpu9150.js');
 

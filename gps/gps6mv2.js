@@ -56,8 +56,8 @@ serialPort.on('data', function (data) {
                     pack.angle = nmeaArr[8] == '' ? pack.angle : nmeaArr[8];
                 }
                 else if (nmeaString.substring(3, 6) == 'GGA') {
-                    pack.longitude = nmeaArr[4].substring(0, 3) + '.' + (nmeaArr[4] / 60).toString().substring(2, 6);
-                    pack.latitude = nmeaArr[2].substring(0, 2) + '.' + (nmeaArr[2] / 60).toString().substring(2, 6);
+                    pack.longitude = nmeaArr[4].substring(0, 3) + '.' + (nmeaArr[4].substring(3, nmeaArr[4].length + 1) / 60).toString().replace('.', '');
+                    pack.latitude = nmeaArr[2].substring(0, 2) + '.' + (nmeaArr[2].substring(2, nmeaArr[2].length + 1) / 60).toString().replace('.', '');
                     pack.altitude = Math.round(nmeaArr[9]);
                     pack.satellites = nmeaArr[7];
                 }

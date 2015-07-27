@@ -45,8 +45,8 @@ setInterval(function () {
             buf.writeInt8(gps.hour, 18);
             buf.writeInt8(gps.minute, 19);
             buf.writeInt8(gps.second, 20);
-            buf.writeInt32BE(gps.longitude, 21);
-            buf.writeInt32BE(gps.latitude, 25);
+            buf.writeFloatBE(gps.longitude, 21);
+            buf.writeFloatBE(gps.latitude, 25);
             buf.writeInt16BE(gps.altitude, 29);
             buf.writeInt16BE(gps.angle, 31);
             buf.writeInt16BE(gps.speed, 33);

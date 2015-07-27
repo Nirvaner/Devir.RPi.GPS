@@ -70,12 +70,12 @@ setInterval(function () {
         var packet = gpsQueue.pop();
         var gpsPacketSocket = net.connect(config.GpsPacketSocket);
         gpsPacketSocket.on('connect', function () {
-            gpsPacketSocket.write(packet, function(){
+            gpsPacketSocket.write(packet, function () {
                 gpsPacketSocket.destroy();
             });
             if (gpsQueue.length == 0) {
                 sendDelay = 10000;
-            }else{
+            } else {
                 sendDelay = 0;
             }
         });
@@ -104,6 +104,6 @@ function DistanceTo(coor1, coor2) {
     var pLat = Math.pow(Math.sin((lat2 - lat1) / 2), 2);
     var pLon = Math.pow(Math.sin((lon2 - lon1) / 2), 2);
     var result = 2 * Math.asin(Math.sqrt(pLat + Math.cos(lat1) * Math.cos(lat2) * pLon));
-    result =result * Radius;
+    result = result * Radius;
     return result;
 }

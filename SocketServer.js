@@ -56,17 +56,7 @@ function Run() {
                     } else if (strData.substring(0, 8) == 'settings') {
 
                     } else if (strData.substring(0, 7) == 'gitpull') {
-                        if (skd) {
-                            spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', skd.pid], {stdio: 'inherit'});
-                        }
-                        if (siements) {
-                            siements.on('exit', function () {
-                                GitPull();
-                            });
-                            spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
-                        } else {
-                            GitPull();
-                        }
+                        GitPull();
                     } else {
                         console.log('unresolved data: ' + strData);
                     }

@@ -57,8 +57,8 @@ serialPort.on('data', function (data) {
                 }
                 else if (nmeaString.substring(3, 6) == 'GGA') {
                     console.log(nmeaArr[2], nmeaArr[4]);
-                    pack.longitude = nmeaArr[4].replace('.', '') * 1;
-                    pack.latitude = nmeaArr[2].replace('.', '') * 1;
+                    pack.longitude = (nmeaArr[4].substring(0, 3) + '' + (nmeaArr[4] * 100 / 60).replace('.', '')) * 1;
+                    pack.latitude = (nmeaArr[2].substring(0, 3) + '' + (nmeaArr[2] * 100 / 60).replace('.', '')) * 1;
                     pack.altitude = Math.round(nmeaArr[9]);
                     pack.satellites = nmeaArr[7];
                 }
@@ -73,7 +73,7 @@ serialPort.on('data', function (data) {
             }
             nmeaString += s;
         }
-    }catch(error){
+    } catch (error) {
         console.log('ErrorGpsSerialPortOnData: ');
         console.log(error);
     }

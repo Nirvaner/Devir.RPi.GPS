@@ -56,6 +56,7 @@ serialPort.on('data', function (data) {
                     pack.angle = nmeaArr[8] == '' ? pack.angle : nmeaArr[8];
                 }
                 else if (nmeaString.substring(3, 6) == 'GGA') {
+                    console.log(nmeaArr[2], nmeaArr[4]);
                     pack.longitude = nmeaArr[4].replace('.', '') * 1;
                     pack.latitude = nmeaArr[2].replace('.', '') * 1;
                     pack.altitude = Math.round(nmeaArr[9]);

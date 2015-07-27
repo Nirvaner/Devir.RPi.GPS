@@ -33,10 +33,10 @@ setInterval(function () {
             lastTime = new Date();
             lastCoor.lat = curCoor.lat;
             lastCoor.lon = curCoor.lon;
-            console.log('Logic packet++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
             if (gpsQueue.length > config.MaxPackets) {
                 gpsQueue.pop();
             }
+            console.log(gps.latitude + ', ' + gps.longitude);
             var buf = new Buffer(48);
             buf.write(config.Imei);
             buf.writeInt8(gps.year, 15);

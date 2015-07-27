@@ -37,22 +37,23 @@ setInterval(function () {
             if (gpsQueue.length > config.MaxPackets) {
                 gpsQueue.pop();
             }
-            var buf = new Buffer(33);
-            buf.writeInt8(gps.year, 0);
-            buf.writeInt8(gps.month, 1);
-            buf.writeInt8(gps.day, 2);
-            buf.writeInt8(gps.hour, 3);
-            buf.writeInt8(gps.minute, 4);
-            buf.writeInt8(gps.second, 5);
-            buf.writeInt32BE(gps.longitude, 6);
-            buf.writeInt32BE(gps.latitude, 10);
-            buf.writeInt16BE(gps.altitude, 14);
-            buf.writeInt16BE(gps.angle, 16);
-            buf.writeInt16BE(gps.speed, 18);
-            buf.writeInt8(gps.satellites, 20);
-            buf.writeFloatBE(gps.pdop, 21);
-            buf.writeFloatBE(gps.hdop, 25);
-            buf.writeFloatBE(gps.vdop, 29);
+            var buf = new Buffer(48);
+            buf.write(config.Imei);
+            buf.writeInt8(gps.year, 15);
+            buf.writeInt8(gps.month, 16);
+            buf.writeInt8(gps.day, 17);
+            buf.writeInt8(gps.hour, 18);
+            buf.writeInt8(gps.minute, 19);
+            buf.writeInt8(gps.second, 20);
+            buf.writeInt32BE(gps.longitude, 21);
+            buf.writeInt32BE(gps.latitude, 25);
+            buf.writeInt16BE(gps.altitude, 29);
+            buf.writeInt16BE(gps.angle, 31);
+            buf.writeInt16BE(gps.speed, 33);
+            buf.writeInt8(gps.satellites, 35);
+            buf.writeFloatBE(gps.pdop, 36);
+            buf.writeFloatBE(gps.hdop, 40);
+            buf.writeFloatBE(gps.vdop, 44);
             gpsQueue.unshift(buf);
         }
     }

@@ -13,7 +13,7 @@
   },
   "Angle": 20,
   "Distance": 500,
-  "Time": 7200,
+  "Time": 1,
   "Modem": {
     "Path": "/dev/ttyUSB0",
     "Pin": 16,

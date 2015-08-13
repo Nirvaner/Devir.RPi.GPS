@@ -96,10 +96,10 @@ setInterval(function () {
 
 function DistanceTo(coor1, coor2) {
     const Radius = 6372795; // –ассто€ние от центра земли до поверхности в метрах
-    var lat1 = (coor1.lat / 10000000) * Math.PI / 180;
-    var lat2 = (coor2.lat / 10000000) * Math.PI / 180;
-    var lon1 = (coor1.lon / 10000000) * Math.PI / 180;
-    var lon2 = (coor2.lon / 10000000) * Math.PI / 180;
+    var lat1 = coor1.lat * Math.PI / 180;
+    var lat2 = coor2.lat * Math.PI / 180;
+    var lon1 = coor1.lon * Math.PI / 180;
+    var lon2 = coor2.lon * Math.PI / 180;
     var pLat = Math.pow(Math.sin((lat2 - lat1) / 2), 2);
     var pLon = Math.pow(Math.sin((lon2 - lon1) / 2), 2);
     var result = 2 * Math.asin(Math.sqrt(pLat + Math.cos(lat1) * Math.cos(lat2) * pLon));

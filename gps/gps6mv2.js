@@ -2,12 +2,7 @@ const SerialPortGPS = '/dev/ttyAMA0';
 var _ = require('underscore')._;
 
 var packet = {
-    year: 0,
-    month: 0,
-    day: 0,
-    hour: 0,
-    minute: 0,
-    second: 0,
+    date: new Date(),
     longitude: 0,
     latitude: 0,
     altitude: 0,
@@ -46,12 +41,20 @@ serialPort.on('data', function (data) {
                 var nmeaArr = nmeaString.split(',');
                 if (nmeaString.substring(3, 6) == 'RMC') {
                     packet = _.extend(packet, pack);
-                    pack.year = nmeaArr[9].substring(4);
-                    pack.month = nmeaArr[9].substring(2, 4);
-                    pack.day = nmeaArr[9].substring(0, 2);
-                    pack.hour = nmeaArr[1].substring(0, 2);
-                    pack.minute = nmeaArr[1].substring(2, 4);
-                    pack.second = nmeaArr[1].substring(4);
+                    //pack.year = nmeaArr[9].substring(4);
+                    //pack.month = nmeaArr[9].substring(2, 4);
+                    //pack.day = nmeaArr[9].substring(0, 2);
+                    //pack.hour = nmeaArr[1].substring(0, 2);
+                    //pack.minute = nmeaArr[1].substring(2, 4);
+                    //pack.second = nmeaArr[1].substring(4);
+                    pack.date = new Date(
+                        nmeaArr[9].substring(4),
+                        nmeaArr[9].substring(2, 4) - 1,
+                        nmeaArr[9].substring(0, 2),
+                        nmeaArr[1].substring(0, 2),
+                        nmeaArr[1].substring(2, 4),
+                        nmeaArr[1].substring(4)
+                    );
                     pack.speed = Math.round(nmeaArr[7] * 1.852);
                     pack.angle = nmeaArr[8] == '' ? pack.angle : nmeaArr[8];
                 }

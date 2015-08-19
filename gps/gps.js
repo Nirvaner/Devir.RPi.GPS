@@ -36,23 +36,18 @@ setInterval(function () {
             if (gpsQueue.length > config.MaxPackets) {
                 gpsQueue.pop();
             }
-            var buf = new Buffer(48);
+            var buf = new Buffer(44);
             buf.write(config.Imei);
-            buf.writeInt8(gps.year, 15);
-            buf.writeInt8(gps.month, 16);
-            buf.writeInt8(gps.day, 17);
-            buf.writeInt8(gps.hour, 18);
-            buf.writeInt8(gps.minute, 19);
-            buf.writeInt8(gps.second, 20);
-            buf.writeFloatBE(gps.longitude, 21);
-            buf.writeFloatBE(gps.latitude, 25);
-            buf.writeInt16BE(gps.altitude, 29);
-            buf.writeInt16BE(gps.angle, 31);
-            buf.writeInt16BE(gps.speed, 33);
-            buf.writeInt8(gps.satellites, 35);
-            buf.writeFloatBE(gps.pdop, 36);
-            buf.writeFloatBE(gps.hdop, 40);
-            buf.writeFloatBE(gps.vdop, 44);
+            buf.writeUInt32BE(gps.date, 15);
+            buf.writeFloatBE(gps.longitude, 19);
+            buf.writeFloatBE(gps.latitude, 23);
+            buf.writeInt16BE(gps.altitude, 25);
+            buf.writeInt16BE(gps.angle, 27);
+            buf.writeInt16BE(gps.speed, 29);
+            buf.writeInt8(gps.satellites, 31);
+            buf.writeFloatBE(gps.pdop, 32);
+            buf.writeFloatBE(gps.hdop, 36);
+            buf.writeFloatBE(gps.vdop, 40);
             gpsQueue.unshift(buf);
         }
     }

@@ -6,7 +6,26 @@ var modem3g = rootRequire('modem3g.js');
 var ServerSocket;
 
 var pingTimer;
-var connections = [];
+var connections = {
+    get length() {
+        return Object.keys(this).length - 3;
+    },
+    forEach: function(callback){
+        var s = 0;
+        for(var i in this){
+            if (s > 2) {
+                callback(this[i], i, this);
+            }else{
+                s++;
+            }
+        }
+    },
+    shift: function(){
+        var res = this[Object.keys(this)[3]];
+        delete this[Object.keys(this)[3]];
+        return res;
+    }
+};
 var connectCount = 0;
 
 function Run() {
@@ -29,7 +48,7 @@ function Run() {
                 connections.shift().destroy();
             }
             //console.log('SocketServer > Run > Message: pingTimer is start');
-            pingTimer = setTimeout(function() {
+            pingTimer = setTimeout(function () {
                 console.log('SocketServer > Run > Message: pingTimer90000 run');
                 modem3g.reconnect(ConnectToServer);
             }, 90000);
@@ -62,7 +81,7 @@ function Run() {
                         console.log('unresolved data: ' + strData);
                     }
                     //console.log('SocketServer > Run > Message: pingTimer is start');
-                    pingTimer = setTimeout(function() {
+                    pingTimer = setTimeout(function () {
                         console.log('SocketServer > Run > Message: pingTimer120000 run');
                         modem3g.reconnect(ConnectToServer);
                     }, 120000);
@@ -83,7 +102,7 @@ function SocketError(error) {
 function SocketClose(index) {
     return function () {
         try {
-            connections.splice(index, 1);
+            delete connections[config.Servers[index]];
             connectCount++;
             console.log('SocketServer > SocketClose > Message:', config.Servers[index]);
             if (connectCount == config.Servers.length) {
@@ -124,7 +143,7 @@ function ConnectToServer() {
                     index: index
                     , timer: timer
                 }));
-                connections.push(socket);
+                connections[host] = socket;
             });
         } catch (error) {
             console.log('SocketServer > ConnectToServer > Error: ' + error);
@@ -139,7 +158,7 @@ module.exports.Start = function () {
 // Helpers
 
 function GitPull() {
-    setTimeout(function() {
+    setTimeout(function () {
         try {
             ServerSocket.write('0');
             ServerSocket.end();

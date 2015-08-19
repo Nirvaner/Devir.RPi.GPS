@@ -48,8 +48,8 @@ serialPort.on('data', function (data) {
                     //pack.minute = nmeaArr[1].substring(2, 4);
                     //pack.second = nmeaArr[1].substring(4);
                     pack.date = new Date(
-                        nmeaArr[9].substring(4) + 2000,
-                        nmeaArr[9].substring(2, 4) - 1,
+                        (nmeaArr[9].substring(4) * 1) + 2000,
+                        (nmeaArr[9].substring(2, 4) * 1) - 1,
                         nmeaArr[9].substring(0, 2),
                         nmeaArr[1].substring(0, 2),
                         nmeaArr[1].substring(2, 4),

@@ -38,7 +38,7 @@ setInterval(function () {
             }
             var buf = new Buffer(46);
             buf.write(config.Imei);
-            buf.writeUInt32BE(gps.date, 15);
+            buf.writeUInt32BE(gps.date / 1000, 15);
             buf.writeFloatBE(gps.longitude, 19);
             buf.writeFloatBE(gps.latitude, 23);
             buf.writeInt16BE(gps.altitude, 27);
@@ -52,7 +52,7 @@ setInterval(function () {
         }
     }
     catch (error) {
-        console.log('ErrorGpsLogicInterval: ');
+        console.log('gps > LogicInterval > Error: ');
         console.log(error);
     }
 }, 500);
